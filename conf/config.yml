@@ -1,0 +1,21 @@
+
+http:
+  addr: :9090
+
+model:
+  enable: false
+  db_url: 172.17.0.1:5432
+  db_name: authy
+  db_user: admin
+  db_pwd: admin
+  max_connection: 60
+
+wechat:
+  enable: true
+  appid: wx919dfd3bc27aca6b
+  appsecret: 4c2516457b0b6fffabf9623f97dbb490
+  timeout: 8s
+  push_interval: 1s
+  max_retry: 3
+  headers:
+    Content-Type: application/json
