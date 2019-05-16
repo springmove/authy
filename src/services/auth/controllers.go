@@ -31,7 +31,7 @@ func (s *AuthControllers) Auth(ctx iris.Context) {
 	case AUTH_TYPE_WECHAT:
 		// 微信认证
 		wechatAuthData := auth.Data.(AuthWeChat)
-		wechatAuth := s.service.core.GetService(AUTH_TYPE_WECHAT).(*wechat.WeCharService)
+		wechatAuth := s.service.core.GetService(AUTH_TYPE_WECHAT).(*wechat.WeChatService)
 		wxresp, err := wechatAuth.Auth(wechatAuthData.Code)
 		if err != nil {
 			ctx.StatusCode(iris.StatusBadRequest)

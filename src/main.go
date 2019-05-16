@@ -13,7 +13,7 @@ func main() {
 
 	app := core.GetApp()
 	app.SetConf(*cfg)
-	app.RegistService("wechat", &wechat.WeCharService{})
+	app.RegistService("wechat", &wechat.WeChatService{})
 	app.RegistService("auth", &auth.AuthService{})
 
 	app.Init()

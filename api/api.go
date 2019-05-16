@@ -23,7 +23,7 @@ type Authy struct {
 	http *resty.Client
 }
 
-func (s *Authy) InitSerevice(cfg *AuthyConfig) error {
+func (s *Authy) InitService(cfg *AuthyConfig) error {
 
 	s.cfg = cfg
 	s.http = resty.New()

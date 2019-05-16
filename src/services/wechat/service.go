@@ -8,14 +8,14 @@ import (
 	"time"
 )
 
-type WeCharService struct {
+type WeChatService struct {
 	core base.BaseService
 	cfg  *WeChatConfig
 
 	http *resty.Client
 }
 
-func (s *WeCharService) Init(service base.BaseService) error {
+func (s *WeChatService) Init(service base.BaseService) error {
 	s.core = service
 	s.cfg = s.core.Config("wechat").(*WeChatConfig)
 
@@ -24,11 +24,11 @@ func (s *WeCharService) Init(service base.BaseService) error {
 	return nil
 }
 
-func (s *WeCharService) Release() {
+func (s *WeChatService) Release() {
 
 }
 
-func (s *WeCharService) Auth(code string) (WXAuthResponse, error) {
+func (s *WeChatService) Auth(code string) (WXAuthResponse, error) {
 	war := WXAuthResponse{}
 	resp, err := s.http.R().Get(fmt.Sprintf("https://api.weixin.qq.com/sns/jscode2session?appid=%s&secret=%s&js_code=%s&grant_type=authorization_code",
 		s.cfg.AppID,
@@ -47,7 +47,7 @@ func (s *WeCharService) Auth(code string) (WXAuthResponse, error) {
 	}
 }
 
-func (s *WeCharService) initHttpClient() {
+func (s *WeChatService) initHttpClient() {
 	s.http = resty.New()
 	s.http.SetRESTMode()
 	s.http.SetTimeout(time.Duration(s.cfg.Timeout))
