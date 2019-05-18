@@ -1,21 +1,21 @@
 package auth
 
 import (
-	"github.com/linshenqi/authy/src/base"
+	"github.com/linshenqi/sptty"
 )
 
 type AuthService struct {
-	core        base.BaseService
+	app         sptty.Sptty
 	controllers *AuthControllers
 }
 
-func (s *AuthService) Init(service base.BaseService) error {
-	s.core = service
+func (s *AuthService) Init(app sptty.Sptty) error {
+	s.app = app
 	s.controllers = &AuthControllers{
 		service: s,
 	}
 
-	s.core.AddRoute("POST", "/auth", s.controllers.Auth)
+	s.app.AddRoute("POST", "/auth", s.controllers.Auth)
 
 	return nil
 }

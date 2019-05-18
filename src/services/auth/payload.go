@@ -10,6 +10,11 @@ const (
 	AUTH_TYPE_WECHAT = "wechat"
 )
 
+type RequestError struct {
+	Code string `json:"data"`
+	Msg  string `json:"msg"`
+}
+
 type AuthBody struct {
 	Type string      `json:"type"`
 	Data interface{} `json:"data"`

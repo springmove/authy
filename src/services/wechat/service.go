@@ -3,23 +3,29 @@ package wechat
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/linshenqi/authy/src/base"
+	"github.com/linshenqi/sptty"
 	"gopkg.in/resty.v1"
-	"time"
 )
 
 type WeChatService struct {
-	core base.BaseService
-	cfg  *WeChatConfig
+	app sptty.Sptty
+	cfg WeChatConfig
 
 	http *resty.Client
 }
 
-func (s *WeChatService) Init(service base.BaseService) error {
-	s.core = service
-	s.cfg = s.core.Config("wechat").(*WeChatConfig)
+func (s *WeChatService) Init(service sptty.Sptty) error {
+	s.app = service
+	s.app.GetConfig("wechat", &s.cfg)
 
-	s.initHttpClient()
+	clientCfg := sptty.HttpClientConfig{
+		Timeout:      s.cfg.Timeout,
+		Headers:      s.cfg.Headers,
+		PushInterval: s.cfg.PushInterval,
+		MaxRetry:     s.cfg.MaxRetry,
+	}
+
+	s.http = sptty.CreateHttpClient(&clientCfg)
 
 	return nil
 }
@@ -30,10 +36,12 @@ func (s *WeChatService) Release() {
 
 func (s *WeChatService) Auth(code string) (WXAuthResponse, error) {
 	war := WXAuthResponse{}
-	resp, err := s.http.R().Get(fmt.Sprintf("https://api.weixin.qq.com/sns/jscode2session?appid=%s&secret=%s&js_code=%s&grant_type=authorization_code",
+	url := fmt.Sprintf("https://api.weixin.qq.com/sns/jscode2session?appid=%s&secret=%s&js_code=%s&grant_type=authorization_code",
 		s.cfg.AppID,
 		s.cfg.AppSecret,
-		code))
+		code)
+
+	resp, err := s.http.R().Get(url)
 
 	if err != nil {
 		return war, err
@@ -45,16 +53,4 @@ func (s *WeChatService) Auth(code string) (WXAuthResponse, error) {
 			return war, nil
 		}
 	}
-}
-
-func (s *WeChatService) initHttpClient() {
-	s.http = resty.New()
-	s.http.SetRESTMode()
-	s.http.SetTimeout(time.Duration(s.cfg.Timeout))
-	s.http.SetContentLength(true)
-	s.http.SetHeaders(s.cfg.Headers)
-	s.http.
-		SetRetryCount(s.cfg.MaxRetry).
-		SetRetryWaitTime(time.Duration(s.cfg.PushInterval)).
-		SetRetryMaxWaitTime(20 * time.Second)
 }

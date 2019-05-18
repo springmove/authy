@@ -3,7 +3,6 @@ package auth
 import (
 	"encoding/json"
 	"github.com/kataras/iris"
-	"github.com/linshenqi/authy/src/core"
 	"github.com/linshenqi/authy/src/services/wechat"
 )
 
@@ -19,7 +18,7 @@ func (s *AuthControllers) Auth(ctx iris.Context) {
 
 	if err != nil {
 		ctx.StatusCode(iris.StatusBadRequest)
-		b, _ := json.Marshal(core.RequestError{
+		b, _ := json.Marshal(RequestError{
 			Code: AUTHY_ERR_REQUEST_BODY,
 			Msg:  err.Error(),
 		})
@@ -30,12 +29,25 @@ func (s *AuthControllers) Auth(ctx iris.Context) {
 	switch auth.Type {
 	case AUTH_TYPE_WECHAT:
 		// 微信认证
-		wechatAuthData := auth.Data.(AuthWeChat)
-		wechatAuth := s.service.core.GetService(AUTH_TYPE_WECHAT).(*wechat.WeChatService)
+		strData, _ := json.Marshal(auth.Data)
+
+		wechatAuthData := AuthWeChat{}
+		err := json.Unmarshal(strData, &wechatAuthData)
+		if err != nil {
+			ctx.StatusCode(iris.StatusBadRequest)
+			b, _ := json.Marshal(RequestError{
+				Code: AUTHY_ERR_FAIL,
+				Msg:  err.Error(),
+			})
+			ctx.Write(b)
+			return
+		}
+
+		wechatAuth := s.service.app.GetService(AUTH_TYPE_WECHAT).(*wechat.WeChatService)
 		wxresp, err := wechatAuth.Auth(wechatAuthData.Code)
 		if err != nil {
 			ctx.StatusCode(iris.StatusBadRequest)
-			b, _ := json.Marshal(core.RequestError{
+			b, _ := json.Marshal(RequestError{
 				Code: AUTHY_ERR_FAIL,
 				Msg:  err.Error(),
 			})
@@ -54,7 +66,7 @@ func (s *AuthControllers) Auth(ctx iris.Context) {
 
 	default:
 		ctx.StatusCode(iris.StatusBadRequest)
-		b, _ := json.Marshal(core.RequestError{
+		b, _ := json.Marshal(RequestError{
 			Code: AUTHY_ERR_TYPE,
 			Msg:  "type error",
 		})
