@@ -52,7 +52,7 @@ func (s *Authy) Auth(req *auth.AuthBody) (auth.AuthBody, error) {
 		return ab, err
 	} else {
 		if resp.StatusCode() != http.StatusOK {
-			return ab, errors.New(string(resp.StatusCode()))
+			return ab, errors.New(resp.Status())
 		} else {
 			json.Unmarshal(resp.Body(), &ab)
 			return ab, nil
@@ -71,7 +71,7 @@ func (s *Authy) JwtSigner(claims *jwt.MapClaims) (string, error) {
 		return jr.Token, err
 	} else {
 		if resp.StatusCode() != http.StatusOK {
-			return jr.Token, errors.New(string(resp.StatusCode()))
+			return jr.Token, errors.New(resp.Status())
 		} else {
 			json.Unmarshal(resp.Body(), &jr)
 			return jr.Token, nil
@@ -88,7 +88,7 @@ func (s *Authy) JwtAuther(req *jwt2.JwtAutherRequest) error {
 		return err
 	} else {
 		if resp.StatusCode() != http.StatusOK {
-			return errors.New(string(resp.StatusCode()))
+			return errors.New(resp.Status())
 		} else {
 			return nil
 		}
