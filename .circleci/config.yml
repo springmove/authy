@@ -17,6 +17,7 @@ jobs:
             cp -r /home/circleci/project/* ./
             ls -al ./
             go get -u github.com/golang/dep
+            dep init
             dep ensure -v
             CGO_ENABLED=0 go build -o ./build/authy ./src/main.go
             docker login -u $DOCKER_USER -p $DOCKER_PWD
