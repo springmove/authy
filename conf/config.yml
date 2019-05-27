@@ -1,6 +1,15 @@
 
 http:
-  addr: :9090
+  addr: :10001
+
+model:
+  enable: false
+#  source: postgres
+#  name: name
+#  user: user
+#  pwd: pwd
+#  host: 127.0.0.1
+#  port: 5432
 
 wechat:
   enable: true
@@ -11,3 +20,6 @@ wechat:
   max_retry: 3
   headers:
     Content-Type: application/json
+
+jwt:
+  secret: LijwefL(*IJWE)J@309j@#)(I#$@)(*

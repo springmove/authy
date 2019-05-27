@@ -23,3 +23,7 @@ func (s *AuthService) Init(app sptty.Sptty) error {
 func (s *AuthService) Release() {
 
 }
+
+func (s *AuthService) Enable() bool {
+	return true
+}

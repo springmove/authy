@@ -1,7 +1,10 @@
 package api
 
 import (
+	"fmt"
+	"github.com/dgrijalva/jwt-go"
 	"github.com/linshenqi/authy/src/services/auth"
+	jwt2 "github.com/linshenqi/authy/src/services/jwt"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -29,4 +32,39 @@ func TestAuthWechat(t *testing.T) {
 
 	//resp.Data.(wechat.WXAuthResponse)
 	//fmt.Printf("%s\n", wx)
+}
+
+func TestJwt(t *testing.T) {
+	cfg := AuthyConfig{
+		Url:          "http://127.0.0.1:10001",
+		Timeout:      3,
+		Headers:      map[string]string{"Content-Type": "application/json"},
+		PushInterval: 1,
+		MaxRetry:     1,
+	}
+
+	authy := Authy{}
+	authy.InitService(&cfg)
+
+	claims := jwt.MapClaims{
+		"id":  "wefwef234",
+		"wef": "232r2r2",
+	}
+
+	token, err := authy.JwtSigner(&claims)
+	if err == nil {
+		fmt.Println(token)
+	}
+
+	//claims["id"] = "wef"
+	err = authy.JwtAuther(&jwt2.JwtAutherRequest{
+		Token:  token,
+		Claims: claims,
+	})
+
+	if err == nil {
+		fmt.Println("ok")
+	} else {
+		fmt.Println("fail")
+	}
 }

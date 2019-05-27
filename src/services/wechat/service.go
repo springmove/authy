@@ -3,6 +3,7 @@ package wechat
 import (
 	"encoding/json"
 	"fmt"
+
 	"github.com/linshenqi/sptty"
 	"gopkg.in/resty.v1"
 )
@@ -32,6 +33,10 @@ func (s *WeChatService) Init(service sptty.Sptty) error {
 
 func (s *WeChatService) Release() {
 
+}
+
+func (s *WeChatService) Enable() bool {
+	return true
 }
 
 func (s *WeChatService) Auth(code string) (WXAuthResponse, error) {
