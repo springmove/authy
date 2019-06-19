@@ -79,18 +79,20 @@ func (s *Authy) JwtSigner(claims *jwt.MapClaims) (string, error) {
 	}
 }
 
-func (s *Authy) JwtAuther(req *jwt2.JwtAutherRequest) error {
+func (s *Authy) JwtAuther(req *jwt2.JwtAutherRequest) (jwt.MapClaims, error) {
 	r := s.http.R().SetBody(req).SetHeader("content-type", "application/json")
 	url := fmt.Sprintf("%s/api/v1/jwt-auther", s.cfg.Url)
 	resp, err := r.Put(url)
 
 	if err != nil {
-		return err
+		return nil, err
 	} else {
 		if resp.StatusCode() != http.StatusOK {
-			return errors.New(resp.Status())
+			return nil, errors.New(resp.Status())
 		} else {
-			return nil
+			claims := jwt.MapClaims{}
+			_ = json.Unmarshal(resp.Body(), &claims)
+			return claims, nil
 		}
 	}
 }

@@ -43,7 +43,7 @@ func (s *JwtService) Sign(claims jwt.MapClaims) (string, error) {
 	return tokenString, err
 }
 
-func (s *JwtService) Validate(myClaims jwt.MapClaims, tokenStr string) error {
+func (s *JwtService) Validate(myClaims jwt.MapClaims, tokenStr string) (interface{}, error) {
 	token, err := jwt.Parse(tokenStr, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
@@ -53,18 +53,18 @@ func (s *JwtService) Validate(myClaims jwt.MapClaims, tokenStr string) error {
 	})
 
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 		for k, _ := range claims {
 			if claims[k] != myClaims[k] {
-				return errors.New("token validate failed")
+				return nil, errors.New("token validate failed")
 			}
 		}
 
-		return nil
+		return claims, nil
 	} else {
-		return errors.New("token validate failed")
+		return nil, errors.New("token validate failed")
 	}
 }

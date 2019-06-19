@@ -34,7 +34,7 @@ func (s *JwtControllers) Signer(ctx iris.Context) {
 	})
 
 	ctx.StatusCode(iris.StatusOK)
-	ctx.Write(sbody)
+	_, _ = ctx.Write(sbody)
 }
 
 func (s *JwtControllers) Auther(ctx iris.Context) {
@@ -47,11 +47,13 @@ func (s *JwtControllers) Auther(ctx iris.Context) {
 		return
 	}
 
-	err = s.service.Validate(req.Claims, req.Token)
+	claims, err := s.service.Validate(req.Claims, req.Token)
 	if err != nil {
 		ctx.StatusCode(iris.StatusConflict)
 		return
 	}
 
 	ctx.StatusCode(iris.StatusOK)
+	sBody, _ := json.Marshal(claims)
+	_, _ = ctx.Write(sBody)
 }
