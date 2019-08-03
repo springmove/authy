@@ -16,8 +16,8 @@ jobs:
             mkdir -p /go/src/github.com/linshenqi/authy && cd /go/src/github.com/linshenqi/authy
             cp -r /home/circleci/project/* ./
             ls -al ./
-            go get -u github.com/golang/dep
-            dep ensure -v
+            #go get -u github.com/golang/dep
+            #dep ensure -v
             CGO_ENABLED=0 go build -o ./build/authy ./src/main.go
             docker login -u $DOCKER_USER -p $DOCKER_PWD
             sh ./build_docker.sh
