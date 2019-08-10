@@ -57,7 +57,7 @@ func TestJwt(t *testing.T) {
 	}
 
 	//claims["id"] = "wef"
-	err = authy.JwtAuther(&jwt2.JwtAutherRequest{
+	_, err = authy.JwtAuther(&jwt2.JwtAutherRequest{
 		Token:  token,
 		Claims: claims,
 	})
@@ -67,4 +67,9 @@ func TestJwt(t *testing.T) {
 	} else {
 		fmt.Println("fail")
 	}
+
+	c, _ := authy.JwtParser(&jwt2.JwtAutherRequest{
+		Token: token,
+	})
+	fmt.Println(c)
 }

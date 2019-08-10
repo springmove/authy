@@ -96,3 +96,21 @@ func (s *Authy) JwtAuther(req *jwt2.JwtAutherRequest) (jwt.MapClaims, error) {
 		}
 	}
 }
+
+func (s *Authy) JwtParser(req *jwt2.JwtAutherRequest) (jwt.MapClaims, error) {
+	r := s.http.R().SetBody(req).SetHeader("content-type", "application/json")
+	url := fmt.Sprintf("%s/api/v1/jwt-parser", s.cfg.Url)
+	resp, err := r.Put(url)
+
+	if err != nil {
+		return nil, err
+	} else {
+		if resp.StatusCode() != http.StatusOK {
+			return nil, errors.New(resp.Status())
+		} else {
+			claims := jwt.MapClaims{}
+			_ = json.Unmarshal(resp.Body(), &claims)
+			return claims, nil
+		}
+	}
+}

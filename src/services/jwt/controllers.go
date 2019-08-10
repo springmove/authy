@@ -57,3 +57,24 @@ func (s *JwtControllers) Auther(ctx iris.Context) {
 	sBody, _ := json.Marshal(claims)
 	_, _ = ctx.Write(sBody)
 }
+
+func (s *JwtControllers) Parser(ctx iris.Context) {
+	ctx.Header("content-type", "application/json")
+	req := JwtAutherRequest{}
+	err := ctx.ReadJSON(&req)
+	if err != nil {
+		ctx.StatusCode(iris.StatusBadRequest)
+		ctx.Write(services.NewRequestError(JWT_ERR_REQUEST_PAYLOAD, err.Error()))
+		return
+	}
+
+	claims, err := s.service.Parse(req.Token)
+	if err != nil {
+		ctx.StatusCode(iris.StatusConflict)
+		return
+	}
+
+	ctx.StatusCode(iris.StatusOK)
+	sBody, _ := json.Marshal(claims)
+	_, _ = ctx.Write(sBody)
+}
