@@ -4,32 +4,25 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/linshenqi/sptty"
-	"gopkg.in/resty.v1"
+	"github.com/linshenqi/authy/src/services/oauth"
 )
 
 type MiniProgram struct {
-	http      *resty.Client
-	endpoints map[string]Endpoint
+	oauth.BaseOAuth
 }
 
-func (s *MiniProgram) Auth(req interface{}) (interface{}, error) {
-	authData, endpoint, err := preAuth(req, s.endpoints)
+func (s *MiniProgram) OAuth(req *oauth.Request) (*oauth.Response, error) {
+	endpoint, err := s.PreAuth(req)
 	if err != nil {
 		return nil, err
 	}
 
-	resp, err := s.miniprogramAuth(endpoint.AppID, endpoint.AppSecret, authData.Code)
+	resp, err := s.miniprogramAuth(endpoint.AppID, endpoint.AppSecret, req.Code)
 	if err != nil {
 		return nil, err
 	}
 
-	return resp, nil
-}
-
-func (s *MiniProgram) init(endpoints map[string]Endpoint) {
-	s.endpoints = endpoints
-	s.http = sptty.CreateHttpClient(sptty.DefaultHttpClientConfig())
+	return resp.toAuthResponseData(), nil
 }
 
 func (s *MiniProgram) miniprogramAuth(appID string, secret string, code string) (MiniProgramAuthResponse, error) {
@@ -39,7 +32,7 @@ func (s *MiniProgram) miniprogramAuth(appID string, secret string, code string) 
 		secret,
 		code)
 
-	resp, err := s.http.R().Get(url)
+	resp, err := s.Http.R().Get(url)
 
 	if err != nil {
 		return rt, err

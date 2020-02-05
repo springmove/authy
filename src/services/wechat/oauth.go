@@ -4,22 +4,20 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/linshenqi/sptty"
-	"gopkg.in/resty.v1"
+	"github.com/linshenqi/authy/src/services/oauth"
 )
 
 type OAuth struct {
-	http      *resty.Client
-	endpoints map[string]Endpoint
+	oauth.BaseOAuth
 }
 
-func (s *OAuth) Auth(req interface{}) (interface{}, error) {
-	authData, endpoint, err := preAuth(req, s.endpoints)
+func (s *OAuth) OAuth(req *oauth.Request) (*oauth.Response, error) {
+	endpoint, err := s.PreAuth(req)
 	if err != nil {
 		return nil, err
 	}
 
-	resp, err := s.doAuth(endpoint.AppID, endpoint.AppSecret, authData.Code)
+	resp, err := s.doAuth(endpoint.AppID, endpoint.AppSecret, req.Code)
 	if err != nil {
 		return nil, err
 	}
@@ -29,12 +27,7 @@ func (s *OAuth) Auth(req interface{}) (interface{}, error) {
 		return nil, err
 	}
 
-	return user.UserInfo, nil
-}
-
-func (s *OAuth) init(endpoints map[string]Endpoint) {
-	s.endpoints = endpoints
-	s.http = sptty.CreateHttpClient(sptty.DefaultHttpClientConfig())
+	return user.toAuthResponseData(), nil
 }
 
 func (s *OAuth) doAuth(appID string, secret string, code string) (OAuthResponse, error) {
@@ -44,7 +37,7 @@ func (s *OAuth) doAuth(appID string, secret string, code string) (OAuthResponse,
 		secret,
 		code)
 
-	resp, err := s.http.R().Get(url)
+	resp, err := s.Http.R().Get(url)
 
 	if err != nil {
 		return rt, err
@@ -68,7 +61,7 @@ func (s *OAuth) getUserInfo(accessToken string, openID string) (UserInfoResponse
 		accessToken,
 		openID)
 
-	resp, err := s.http.R().Get(url)
+	resp, err := s.Http.R().Get(url)
 
 	if err != nil {
 		return rt, err

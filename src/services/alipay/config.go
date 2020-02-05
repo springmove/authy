@@ -1,4 +1,4 @@
-package wechat
+package alipay
 
 import "github.com/linshenqi/authy/src/services/oauth"
 

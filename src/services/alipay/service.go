@@ -1,18 +1,15 @@
-package wechat
+package alipay
 
-import (
-	"github.com/linshenqi/sptty"
-)
+import "github.com/linshenqi/sptty"
 
 const (
-	ServiceName = "wechat"
+	ServiceName = "alipay"
 )
 
 type Service struct {
 	cfg Config
 
-	OAuth       OAuth
-	MiniProgram MiniProgram
+	OAuth OAuth
 }
 
 func (s *Service) Init(app sptty.Sptty) error {
@@ -22,9 +19,6 @@ func (s *Service) Init(app sptty.Sptty) error {
 
 	s.OAuth = OAuth{}
 	s.OAuth.Init(s.cfg.Endpoints)
-
-	s.MiniProgram = MiniProgram{}
-	s.MiniProgram.Init(s.cfg.Endpoints)
 
 	return nil
 }

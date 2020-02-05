@@ -1,4 +1,4 @@
-package auth
+package oauth
 
 import (
 	"errors"
@@ -6,15 +6,15 @@ import (
 )
 
 const (
-	ServiceName = "auth"
+	ServiceName = "oauth"
 )
 
 type Service struct {
-	authProviders map[string]IAuthProvider
+	oauthProviders map[string]IOAuthProvider
 }
 
 func (s *Service) Init(app sptty.Sptty) error {
-	app.AddRoute("POST", "/auth", s.postAuth)
+	app.AddRoute("POST", "/oauth", s.postAuth)
 	return nil
 }
 
@@ -35,20 +35,20 @@ func (s *Service) doAuth(req Request) (Response, error) {
 		Type: req.Type,
 	}
 
-	provider, exist := s.authProviders[req.Type]
+	provider, exist := s.oauthProviders[req.Type]
 	if !exist {
 		return resp, errors.New("Provider Not Found ")
 	}
 
-	respData, err := provider.Auth(req.Data)
+	respData, err := provider.OAuth(&req)
 	if err != nil {
 		return resp, err
 	}
 
-	resp.Data = respData
+	respData.Type = req.Type
 	return resp, nil
 }
 
-func (s *Service) SetupProviders(providers map[string]IAuthProvider) {
-	s.authProviders = providers
+func (s *Service) SetupProviders(providers map[string]IOAuthProvider) {
+	s.oauthProviders = providers
 }

@@ -11,19 +11,26 @@ http:
 wechat:
   endpoints:
     ashibro_dev:
-      app_id: wx919dfd3bc27aca6b
-      app_secret: 4c2516457b0b6fffabf9623f97dbb490
+      app_id: 1
+      app_secret: 1
+
+alipay:
+  endpoints:
+    ashibro:
+      app_id: 1
+      app_secret: 1
+      public_key: pub
 
 jwt:
   expiry: 0s
 
 totp:
   endpoints:
-    t1:
+    sms:
       issuer: i1
       code_len: 4
       expiry: 60s
-    t2:
+    email:
       issuer: i1
       code_len: 6
       expiry: 10m

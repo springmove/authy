@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/kataras/iris/core/errors"
-	"github.com/linshenqi/authy/src/services/auth"
 	jwt2 "github.com/linshenqi/authy/src/services/jwt"
+	"github.com/linshenqi/authy/src/services/oauth"
 	"github.com/linshenqi/authy/src/services/totp"
 	"github.com/linshenqi/sptty"
 	"gopkg.in/resty.v1"
@@ -27,12 +27,12 @@ func (s *Authy) Init(cfg *Config) {
 	s.http = sptty.CreateHttpClient(sptty.DefaultHttpClientConfig())
 }
 
-func (s *Authy) Auth(req auth.Request) (auth.Response, error) {
+func (s *Authy) Auth(req oauth.Request) (oauth.Response, error) {
 	r := s.http.R().SetBody(req).SetHeader("content-type", "application/json")
-	url := fmt.Sprintf("%s/api/v1/auth", s.cfg.Url)
+	url := fmt.Sprintf("%s/api/v1/oauth", s.cfg.Url)
 	resp, err := r.Post(url)
 
-	ab := auth.Response{}
+	ab := oauth.Response{}
 
 	if err != nil {
 		return ab, err

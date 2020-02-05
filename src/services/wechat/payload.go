@@ -1,13 +1,10 @@
 package wechat
 
+import "github.com/linshenqi/authy/src/services/oauth"
+
 const (
 	WxOK = 0
 )
-
-type AuthData struct {
-	Endpoint string `json:"Endpoint"`
-	Code     string `json:"Code"`
-}
 
 type Response struct {
 	ErrCode int    `json:"errcode"`
@@ -19,6 +16,13 @@ type MiniProgramAuthResponse struct {
 	OpenID     string `json:"openid"`
 	SessionKey string `json:"session_key"`
 	UnionID    string `json:"unionid"`
+}
+
+func (s *MiniProgramAuthResponse) toAuthResponseData() *oauth.Response {
+	return &oauth.Response{
+		OpenID:  s.OpenID,
+		UnionID: s.UnionID,
+	}
 }
 
 type OAuthResponse struct {
@@ -46,4 +50,17 @@ type UserInfo struct {
 type UserInfoResponse struct {
 	Response
 	UserInfo
+}
+
+func (s *UserInfoResponse) toAuthResponseData() *oauth.Response {
+	return &oauth.Response{
+		OpenID:   s.OpenID,
+		UnionID:  s.UnionID,
+		Name:     s.NickName,
+		Gender:   s.Sex,
+		Province: s.Province,
+		City:     s.City,
+		Country:  s.Country,
+		Avatar:   s.HeadImgUrl,
+	}
 }
