@@ -21,11 +21,9 @@ type Authy struct {
 	http *resty.Client
 }
 
-func (s *Authy) Init(cfg *Config) error {
+func (s *Authy) Init(cfg *Config) {
 	s.cfg = cfg
 	s.http = sptty.CreateHttpClient(sptty.DefaultHttpClientConfig())
-
-	return nil
 }
 
 func (s *Authy) Auth(req auth.Request) (auth.Response, error) {
@@ -39,7 +37,7 @@ func (s *Authy) Auth(req auth.Request) (auth.Response, error) {
 		return ab, err
 	} else {
 		if resp.StatusCode() != http.StatusOK {
-			return ab, errors.New(resp.Status())
+			return ab, errors.New(string(resp.Body()))
 		} else {
 			_ = json.Unmarshal(resp.Body(), &ab)
 			return ab, nil
@@ -52,21 +50,21 @@ func (s *Authy) JwtSigner(claims *jwt.MapClaims) (string, error) {
 	url := fmt.Sprintf("%s/api/v1/jwt-signer", s.cfg.Url)
 	resp, err := r.Put(url)
 
-	jr := jwt2.JWTResponse{}
+	jr := jwt2.Response{}
 
 	if err != nil {
 		return jr.Token, err
 	} else {
 		if resp.StatusCode() != http.StatusOK {
-			return jr.Token, errors.New(resp.Status())
+			return jr.Token, errors.New(string(resp.Body()))
 		} else {
-			json.Unmarshal(resp.Body(), &jr)
+			_ = json.Unmarshal(resp.Body(), &jr)
 			return jr.Token, nil
 		}
 	}
 }
 
-func (s *Authy) JwtAuther(req *jwt2.JwtAutherRequest) (jwt.MapClaims, error) {
+func (s *Authy) JwtAuther(req *jwt2.Request) (jwt.MapClaims, error) {
 	r := s.http.R().SetBody(req).SetHeader("content-type", "application/json")
 	url := fmt.Sprintf("%s/api/v1/jwt-auther", s.cfg.Url)
 	resp, err := r.Put(url)
@@ -75,7 +73,7 @@ func (s *Authy) JwtAuther(req *jwt2.JwtAutherRequest) (jwt.MapClaims, error) {
 		return nil, err
 	} else {
 		if resp.StatusCode() != http.StatusOK {
-			return nil, errors.New(resp.Status())
+			return nil, errors.New(string(resp.Body()))
 		} else {
 			claims := jwt.MapClaims{}
 			_ = json.Unmarshal(resp.Body(), &claims)
@@ -84,7 +82,11 @@ func (s *Authy) JwtAuther(req *jwt2.JwtAutherRequest) (jwt.MapClaims, error) {
 	}
 }
 
-func (s *Authy) JwtParser(req *jwt2.JwtAutherRequest) (jwt.MapClaims, error) {
+func (s *Authy) JwtParser(token string) (jwt.MapClaims, error) {
+	req := jwt2.Request{
+		Token: token,
+	}
+
 	r := s.http.R().SetBody(req).SetHeader("content-type", "application/json")
 	url := fmt.Sprintf("%s/api/v1/jwt-parser", s.cfg.Url)
 	resp, err := r.Put(url)
@@ -93,7 +95,7 @@ func (s *Authy) JwtParser(req *jwt2.JwtAutherRequest) (jwt.MapClaims, error) {
 		return nil, err
 	} else {
 		if resp.StatusCode() != http.StatusOK {
-			return nil, errors.New(resp.Status())
+			return nil, errors.New(string(resp.Body()))
 		} else {
 			claims := jwt.MapClaims{}
 			_ = json.Unmarshal(resp.Body(), &claims)

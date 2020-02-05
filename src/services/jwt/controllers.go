@@ -8,44 +8,42 @@ import (
 )
 
 func (s *Service) Signer(ctx iris.Context) {
-	ctx.Header("content-type", "application/json")
-
 	claims := jwt.MapClaims{}
 	err := ctx.ReadJSON(&claims)
 	if err != nil {
 		ctx.StatusCode(iris.StatusBadRequest)
-		ctx.Write(sptty.NewRequestError(JWT_ERR_REQUEST_PAYLOAD, err.Error()))
+		_, _ = ctx.Write(sptty.NewRequestError(RequestFailed, err.Error()))
 		return
 	}
 
 	token, err := s.Sign(claims)
 	if err != nil {
 		ctx.StatusCode(iris.StatusBadRequest)
-		ctx.Write(sptty.NewRequestError(JWT_ERR_SIGN_FAIL, err.Error()))
+		_, _ = ctx.Write(sptty.NewRequestError(RequestFailed, err.Error()))
 		return
 	}
 
-	sbody, _ := json.Marshal(JWTResponse{
+	body, _ := json.Marshal(Response{
 		Token: token,
 	})
 
 	ctx.StatusCode(iris.StatusOK)
-	_, _ = ctx.Write(sbody)
+	_, _ = ctx.Write(body)
 }
 
 func (s *Service) Auther(ctx iris.Context) {
-	ctx.Header("content-type", "application/json")
-	req := JwtAutherRequest{}
+	req := Request{}
 	err := ctx.ReadJSON(&req)
 	if err != nil {
 		ctx.StatusCode(iris.StatusBadRequest)
-		ctx.Write(sptty.NewRequestError(JWT_ERR_REQUEST_PAYLOAD, err.Error()))
+		_, _ = ctx.Write(sptty.NewRequestError(RequestFailed, err.Error()))
 		return
 	}
 
 	claims, err := s.Validate(req.Claims, req.Token)
 	if err != nil {
 		ctx.StatusCode(iris.StatusConflict)
+		_, _ = ctx.Write(sptty.NewRequestError(RequestFailed, err.Error()))
 		return
 	}
 
@@ -56,11 +54,11 @@ func (s *Service) Auther(ctx iris.Context) {
 
 func (s *Service) Parser(ctx iris.Context) {
 	ctx.Header("content-type", "application/json")
-	req := JwtAutherRequest{}
+	req := Request{}
 	err := ctx.ReadJSON(&req)
 	if err != nil {
 		ctx.StatusCode(iris.StatusBadRequest)
-		ctx.Write(sptty.NewRequestError(JWT_ERR_REQUEST_PAYLOAD, err.Error()))
+		_, _ = ctx.Write(sptty.NewRequestError(RequestFailed, err.Error()))
 		return
 	}
 

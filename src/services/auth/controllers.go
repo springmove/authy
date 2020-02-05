@@ -12,12 +12,14 @@ func (s *Service) postAuth(ctx iris.Context) {
 	if err := ctx.ReadJSON(&req); err != nil {
 		ctx.StatusCode(iris.StatusBadRequest)
 		_, _ = ctx.Write(sptty.NewRequestError(AuthFailed, err.Error()))
+		return
 	}
 
 	resp, err := s.doAuth(req)
 	if err != nil {
 		ctx.StatusCode(iris.StatusBadRequest)
 		_, _ = ctx.Write(sptty.NewRequestError(AuthFailed, err.Error()))
+		return
 	}
 
 	ctx.StatusCode(iris.StatusOK)
