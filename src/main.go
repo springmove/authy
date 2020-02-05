@@ -4,6 +4,7 @@ import (
 	"flag"
 	"github.com/linshenqi/authy/src/services/auth"
 	"github.com/linshenqi/authy/src/services/jwt"
+	"github.com/linshenqi/authy/src/services/totp"
 	"github.com/linshenqi/authy/src/services/wechat"
 	"github.com/linshenqi/sptty"
 )
@@ -27,11 +28,13 @@ func main() {
 		wechatService,
 		authService,
 		&jwt.Service{},
+		&totp.Service{},
 	}
 
 	configs := sptty.Configs{
 		&wechat.Config{},
 		&jwt.Config{},
+		&totp.Config{},
 	}
 
 	app.AddServices(services)

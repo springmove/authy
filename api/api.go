@@ -7,6 +7,7 @@ import (
 	"github.com/kataras/iris/core/errors"
 	"github.com/linshenqi/authy/src/services/auth"
 	jwt2 "github.com/linshenqi/authy/src/services/jwt"
+	"github.com/linshenqi/authy/src/services/totp"
 	"github.com/linshenqi/sptty"
 	"gopkg.in/resty.v1"
 	"net/http"
@@ -45,7 +46,7 @@ func (s *Authy) Auth(req auth.Request) (auth.Response, error) {
 	}
 }
 
-func (s *Authy) JwtSigner(claims *jwt.MapClaims) (string, error) {
+func (s *Authy) JwtSigner(claims jwt.MapClaims) (string, error) {
 	r := s.http.R().SetBody(claims).SetHeader("content-type", "application/json")
 	url := fmt.Sprintf("%s/api/v1/jwt-signer", s.cfg.Url)
 	resp, err := r.Put(url)
@@ -64,7 +65,7 @@ func (s *Authy) JwtSigner(claims *jwt.MapClaims) (string, error) {
 	}
 }
 
-func (s *Authy) JwtAuther(req *jwt2.Request) (jwt.MapClaims, error) {
+func (s *Authy) JwtAuther(req jwt2.Request) (jwt.MapClaims, error) {
 	r := s.http.R().SetBody(req).SetHeader("content-type", "application/json")
 	url := fmt.Sprintf("%s/api/v1/jwt-auther", s.cfg.Url)
 	resp, err := r.Put(url)
@@ -100,6 +101,46 @@ func (s *Authy) JwtParser(token string) (jwt.MapClaims, error) {
 			claims := jwt.MapClaims{}
 			_ = json.Unmarshal(resp.Body(), &claims)
 			return claims, nil
+		}
+	}
+}
+
+func (s *Authy) TotpGenerate(endpoint string) (totp.GenerateBody, error) {
+	req := totp.RequestEndpoint{
+		Endpoint: endpoint,
+	}
+
+	r := s.http.R().SetBody(req).SetHeader("content-type", "application/json")
+	url := fmt.Sprintf("%s/api/v1/totp-generate", s.cfg.Url)
+	resp, err := r.Put(url)
+
+	body := totp.GenerateBody{}
+	if err != nil {
+		return body, err
+	} else {
+		if resp.StatusCode() != http.StatusOK {
+			return body, errors.New(string(resp.Body()))
+		} else {
+			_ = json.Unmarshal(resp.Body(), &body)
+			return body, nil
+		}
+	}
+}
+
+func (s *Authy) TotpValidate(req totp.ValidateRequest) (bool, error) {
+	r := s.http.R().SetBody(req).SetHeader("content-type", "application/json")
+	url := fmt.Sprintf("%s/api/v1/totp-validate", s.cfg.Url)
+	resp, err := r.Put(url)
+
+	if err != nil {
+		return false, err
+	} else {
+		if resp.StatusCode() == http.StatusOK {
+			return true, nil
+		} else if resp.StatusCode() == http.StatusConflict {
+			return false, nil
+		} else {
+			return false, errors.New(string(resp.Body()))
 		}
 	}
 }

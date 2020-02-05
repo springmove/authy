@@ -16,3 +16,14 @@ wechat:
 
 jwt:
   expiry: 0s
+
+totp:
+  endpoints:
+    t1:
+      issuer: i1
+      code_len: 4
+      expiry: 60s
+    t2:
+      issuer: i1
+      code_len: 6
+      expiry: 10m

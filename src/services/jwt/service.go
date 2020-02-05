@@ -58,7 +58,7 @@ func (s *Service) Validate(myClaims jwt.MapClaims, tokenStr string) (jwt.MapClai
 		return nil, err
 	}
 
-	for k, _ := range claims {
+	for k := range claims {
 		if k == TimeStamp {
 			if s.cfg.Expiry == (0 * time.Second) {
 				continue
@@ -71,7 +71,7 @@ func (s *Service) Validate(myClaims jwt.MapClaims, tokenStr string) (jwt.MapClai
 
 		} else {
 			if claims[k] != myClaims[k] {
-				return nil, errors.New("Token Validate Failed")
+				return nil, errors.New("Token validate Failed")
 			}
 		}
 	}

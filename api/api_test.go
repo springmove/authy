@@ -5,6 +5,7 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/linshenqi/authy/src/services/auth"
 	jwt2 "github.com/linshenqi/authy/src/services/jwt"
+	"github.com/linshenqi/authy/src/services/totp"
 	"github.com/linshenqi/authy/src/services/wechat"
 	"github.com/stretchr/testify/assert"
 	"testing"
@@ -49,14 +50,14 @@ func TestJwt(t *testing.T) {
 		"wef": "232r2r2",
 	}
 
-	token, err := authy.JwtSigner(&claims)
+	token, err := authy.JwtSigner(claims)
 	if err == nil {
 		fmt.Println(token)
 	}
 
 	//time.Sleep(2 * time.Second)
 	//claims["id"] = "wef"
-	_, err = authy.JwtAuther(&jwt2.Request{
+	_, err = authy.JwtAuther(jwt2.Request{
 		Token:  token,
 		Claims: claims,
 	})
@@ -69,4 +70,36 @@ func TestJwt(t *testing.T) {
 
 	c, _ := authy.JwtParser(token)
 	fmt.Println(c)
+}
+
+func TestTotp(t *testing.T) {
+	authy := getApi()
+
+	body, err := authy.TotpGenerate("t1")
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	}
+
+	fmt.Println(body.Code)
+	fmt.Println(body.Key)
+
+	success, err := authy.TotpValidate(totp.ValidateRequest{
+		RequestEndpoint: totp.RequestEndpoint{Endpoint: "t1"},
+		GenerateBody: totp.GenerateBody{
+			Code: body.Code,
+			Key:  body.Key,
+		},
+	})
+
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	}
+
+	if success {
+		fmt.Println("success")
+	} else {
+		fmt.Println("failed")
+	}
 }
