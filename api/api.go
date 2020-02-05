@@ -12,41 +12,28 @@ import (
 	"net/http"
 )
 
-type AuthyConfig struct {
-	Url          string            `yaml:"url"`
-	Timeout      int               `yaml:"timeout"`
-	Headers      map[string]string `yaml:"headers"`
-	PushInterval int               `yaml:"push_interval"`
-	MaxRetry     int               `yaml:"max_retry"`
+type Config struct {
+	Url string `yaml:"url"`
 }
 
 type Authy struct {
-	cfg  *AuthyConfig
+	cfg  *Config
 	http *resty.Client
 }
 
-func (s *Authy) InitService(cfg *AuthyConfig) error {
-
+func (s *Authy) Init(cfg *Config) error {
 	s.cfg = cfg
-
-	clientCfg := sptty.HttpClientConfig{
-		Timeout:      s.cfg.Timeout,
-		Headers:      s.cfg.Headers,
-		PushInterval: s.cfg.PushInterval,
-		MaxRetry:     s.cfg.MaxRetry,
-	}
-
-	s.http = sptty.CreateHttpClient(&clientCfg)
+	s.http = sptty.CreateHttpClient(sptty.DefaultHttpClientConfig())
 
 	return nil
 }
 
-func (s *Authy) Auth(req *auth.AuthBody) (auth.AuthBody, error) {
+func (s *Authy) Auth(req auth.Request) (auth.Response, error) {
 	r := s.http.R().SetBody(req).SetHeader("content-type", "application/json")
 	url := fmt.Sprintf("%s/api/v1/auth", s.cfg.Url)
 	resp, err := r.Post(url)
 
-	ab := auth.AuthBody{}
+	ab := auth.Response{}
 
 	if err != nil {
 		return ab, err
@@ -54,7 +41,7 @@ func (s *Authy) Auth(req *auth.AuthBody) (auth.AuthBody, error) {
 		if resp.StatusCode() != http.StatusOK {
 			return ab, errors.New(resp.Status())
 		} else {
-			json.Unmarshal(resp.Body(), &ab)
+			_ = json.Unmarshal(resp.Body(), &ab)
 			return ab, nil
 		}
 	}

@@ -15,17 +15,23 @@ func main() {
 	app := sptty.GetApp()
 	app.ConfFromFile(*cfg)
 
-	services := map[string]sptty.Service{
-		"wechat": &wechat.WeChatService{},
-		"auth":   &auth.AuthService{},
-		"jwt":    &jwt.JwtService{},
+	wechatService := &wechat.Service{}
+
+	authService := &auth.Service{}
+	authService.SetupProviders(map[string]auth.IAuthProvider{
+		auth.WeChatOAuth:       &wechatService.OAuth,
+		auth.WeChatMiniProgram: &wechatService.MiniProgram,
+	})
+
+	services := sptty.Services{
+		wechatService,
+		authService,
+		&jwt.Service{},
 	}
 
-	configs := sptty.SpttyConfig{
-		"http":   sptty.HttpConfig{},
-		"model":  sptty.ModelConfig{},
-		"wechat": wechat.WeChatConfig{},
-		"jwt":    jwt.JwtConfig{},
+	configs := sptty.Configs{
+		&wechat.Config{},
+		&jwt.Config{},
 	}
 
 	app.AddServices(services)

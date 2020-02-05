@@ -2,60 +2,62 @@ package wechat
 
 import (
 	"encoding/json"
-	"fmt"
-
+	"errors"
 	"github.com/linshenqi/sptty"
-	"gopkg.in/resty.v1"
 )
 
-type WeChatService struct {
-	app sptty.Sptty
-	cfg WeChatConfig
+const (
+	ServiceName = "wechat"
+)
 
-	http *resty.Client
+type Service struct {
+	cfg Config
+
+	OAuth       OAuth
+	MiniProgram MiniProgram
 }
 
-func (s *WeChatService) Init(service sptty.Sptty) error {
-	s.app = service
-	s.app.GetConfig("wechat", &s.cfg)
-
-	clientCfg := sptty.HttpClientConfig{
-		Timeout:      s.cfg.Timeout,
-		Headers:      s.cfg.Headers,
-		PushInterval: s.cfg.PushInterval,
-		MaxRetry:     s.cfg.MaxRetry,
+func (s *Service) Init(app sptty.Sptty) error {
+	if err := app.GetConfig(ServiceName, &s.cfg); err != nil {
+		return err
 	}
 
-	s.http = sptty.CreateHttpClient(&clientCfg)
+	s.OAuth = OAuth{}
+	s.OAuth.init(s.cfg.Endpoints)
+
+	s.MiniProgram = MiniProgram{}
+	s.MiniProgram.init(s.cfg.Endpoints)
 
 	return nil
 }
 
-func (s *WeChatService) Release() {
+func (s *Service) Release() {
 
 }
 
-func (s *WeChatService) Enable() bool {
+func (s *Service) Enable() bool {
 	return true
 }
 
-func (s *WeChatService) Auth(code string) (WXAuthResponse, error) {
-	war := WXAuthResponse{}
-	url := fmt.Sprintf("https://api.weixin.qq.com/sns/jscode2session?appid=%s&secret=%s&js_code=%s&grant_type=authorization_code",
-		s.cfg.AppID,
-		s.cfg.AppSecret,
-		code)
+func (s *Service) ServiceName() string {
+	return ServiceName
+}
 
-	resp, err := s.http.R().Get(url)
-
-	if err != nil {
-		return war, err
-	} else {
-		err = json.Unmarshal(resp.Body(), &war)
-		if err != nil {
-			return war, err
-		} else {
-			return war, nil
-		}
+func preAuth(req interface{}, endpoints map[string]Endpoint) (*AuthData, *Endpoint, error) {
+	if req == nil {
+		return nil, nil, errors.New("Params Is Nil ")
 	}
+
+	body, _ := json.Marshal(req)
+	authReq := AuthData{}
+	if err := json.Unmarshal(body, &authReq); err != nil {
+		return nil, nil, err
+	}
+
+	endpoint, exist := endpoints[authReq.Endpoint]
+	if !exist {
+		return nil, nil, errors.New("Endpoint Not Found ")
+	}
+
+	return &authReq, &endpoint, nil
 }

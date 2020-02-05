@@ -1,25 +1,21 @@
 package auth
 
 const (
-	AUTHY_ERR_REQUEST_BODY = "0001"
-	AUTHY_ERR_TYPE         = "0002"
-	AUTHY_ERR_FAIL         = "0003"
+	AuthFailed = "AuthFailed"
 )
 
 const (
-	AUTH_TYPE_WECHAT = "wechat"
+	WeChatOAuth       = "wechat_oauth"
+	WeChatMiniProgram = "wechat_miniprogram"
+	AliPayOAuth       = "alipay_oauth"
 )
 
-type RequestError struct {
-	Code string `json:"data"`
-	Msg  string `json:"msg"`
-}
-
-type AuthBody struct {
+type Request struct {
 	Type string      `json:"type"`
 	Data interface{} `json:"data"`
 }
 
-type AuthWeChat struct {
-	Code string `json:"code"`
+type Response struct {
+	Type string      `json:"type"`
+	Data interface{} `json:"data"`
 }

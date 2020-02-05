@@ -11,11 +11,7 @@ import (
 
 func TestAuthWechat(t *testing.T) {
 	cfg := AuthyConfig{
-		Url:          "http://127.0.0.1:9090",
-		Timeout:      3,
-		Headers:      map[string]string{"Content-Type": "application/json"},
-		PushInterval: 1,
-		MaxRetry:     1,
+		Url: "http://127.0.0.1:9090",
 	}
 
 	authy := Authy{}
@@ -36,11 +32,7 @@ func TestAuthWechat(t *testing.T) {
 
 func TestJwt(t *testing.T) {
 	cfg := AuthyConfig{
-		Url:          "http://127.0.0.1:10001",
-		Timeout:      3,
-		Headers:      map[string]string{"Content-Type": "application/json"},
-		PushInterval: 1,
-		MaxRetry:     1,
+		Url: "http://127.0.0.1:10001",
 	}
 
 	authy := Authy{}

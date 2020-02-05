@@ -1,11 +1,22 @@
 package wechat
 
-type WeChatConfig struct {
-	Enable       bool              `yaml:"enable"`
-	AppID        string            `yaml:"appid"`
-	AppSecret    string            `yaml:"appsecret"`
-	Timeout      int               `yaml:"timeout"`
-	Headers      map[string]string `yaml:"headers"`
-	PushInterval int               `yaml:"push_interval"`
-	MaxRetry     int               `yaml:"max_retry"`
+type Config struct {
+	Endpoints map[string]Endpoint `yaml:"endpoints"`
+}
+
+type Endpoint struct {
+	AppID     string `yaml:"app_id"`
+	AppSecret string `yaml:"app_secret"`
+}
+
+func (s *Config) ConfigName() string {
+	return ServiceName
+}
+
+func (s *Config) Validate() error {
+	return nil
+}
+
+func (s *Config) Default() interface{} {
+	return &Config{}
 }

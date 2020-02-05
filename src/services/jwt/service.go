@@ -7,44 +7,48 @@ import (
 	"github.com/linshenqi/sptty"
 )
 
-type JwtService struct {
-	app         sptty.Sptty
-	controllers *JwtControllers
-	cfg         JwtConfig
+const (
+	ServiceName = "jwt"
+	Secret      = "LijwefL(*IJWE)J@309j@#)(I#$@)(*"
+)
+
+type Service struct {
+	cfg Config
 }
 
-func (s *JwtService) Init(app sptty.Sptty) error {
-	s.app = app
-	app.GetConfig("jwt", &s.cfg)
-
-	s.controllers = &JwtControllers{
-		service: s,
+func (s *Service) Init(app sptty.Sptty) error {
+	if err := app.GetConfig(s.ServiceName(), &s.cfg); err != nil {
+		return err
 	}
 
-	s.app.AddRoute("PUT", "/jwt-signer", s.controllers.Signer)
-	s.app.AddRoute("PUT", "/jwt-auther", s.controllers.Auther)
-	s.app.AddRoute("PUT", "/jwt-parser", s.controllers.Parser)
+	app.AddRoute("PUT", "/jwt-signer", s.Signer)
+	app.AddRoute("PUT", "/jwt-auther", s.Auther)
+	app.AddRoute("PUT", "/jwt-parser", s.Parser)
 
 	return nil
 }
 
-func (s *JwtService) Release() {
+func (s *Service) Release() {
 
 }
 
-func (s *JwtService) Enable() bool {
+func (s *Service) Enable() bool {
 	return true
 }
 
-func (s *JwtService) Sign(claims jwt.MapClaims) (string, error) {
+func (s *Service) ServiceName() string {
+	return ServiceName
+}
+
+func (s *Service) Sign(claims jwt.MapClaims) (string, error) {
 	tokenString := ""
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
-	tokenString, err := token.SignedString([]byte(s.cfg.Secret))
+	tokenString, err := token.SignedString([]byte(Secret))
 	return tokenString, err
 }
 
-func (s *JwtService) Validate(myClaims jwt.MapClaims, tokenStr string) (interface{}, error) {
+func (s *Service) Validate(myClaims jwt.MapClaims, tokenStr string) (interface{}, error) {
 
 	claims, err := s.Parse(tokenStr)
 	if err != nil {
@@ -60,13 +64,13 @@ func (s *JwtService) Validate(myClaims jwt.MapClaims, tokenStr string) (interfac
 	return claims, nil
 }
 
-func (s *JwtService) Parse(tokenStr string) (interface{}, error) {
+func (s *Service) Parse(tokenStr string) (interface{}, error) {
 	token, err := jwt.Parse(tokenStr, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
 		}
 
-		return []byte(s.cfg.Secret), nil
+		return []byte(Secret), nil
 	})
 
 	if err != nil {

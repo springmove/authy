@@ -1,25 +1,18 @@
 
+log:
+  file: STDOUT
+  level: DEBUG
+  max_age: 1000h
+  rotate: 24h
+
 http:
   addr: :10001
 
-model:
-  enable: false
-#  source: postgres
-#  name: name
-#  user: user
-#  pwd: pwd
-#  host: 127.0.0.1
-#  port: 5432
-
 wechat:
-  enable: true
-  appid: wx919dfd3bc27aca6b
-  appsecret: 4c2516457b0b6fffabf9623f97dbb490
-  timeout: 8
-  push_interval: 1
-  max_retry: 3
-  headers:
-    Content-Type: application/json
+  endpoints:
+    ashibro_dev:
+      app_id: wx919dfd3bc27aca6b
+      app_secret: 4c2516457b0b6fffabf9623f97dbb490
 
 jwt:
-  secret: LijwefL(*IJWE)J@309j@#)(I#$@)(*
+  expiry: 24h
