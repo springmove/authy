@@ -1,7 +1,8 @@
 package oauth
 
 const (
-	AuthFailed = "AuthFailed"
+	ErrAuthFailed       = "ErrAuthFailed"
+	ErrEndpointNotFound = "EndpointNotFound"
 )
 
 const (
@@ -11,9 +12,9 @@ const (
 )
 
 type Endpoint struct {
-	AppID     string `yaml:"app_id"`
-	AppSecret string `yaml:"app_secret"`
-	PublicKey string `yaml:"public_key"`
+	AppID     string `yaml:"app_id" json:"app_id"`
+	AppSecret string `yaml:"app_secret" json:"app_secret"`
+	PublicKey string `yaml:"public_key" json:"public_key"`
 }
 
 type Request struct {

@@ -24,7 +24,7 @@ func getApi() *Authy {
 func TestAuthWechatOAuth(t *testing.T) {
 	authy := getApi()
 
-	_, err := authy.Auth(oauth.Request{
+	_, err := authy.OAuth(oauth.Request{
 		Type:     oauth.WeChatOAuth,
 		Endpoint: "ashibro_dev",
 		Code:     "1234",

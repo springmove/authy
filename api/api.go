@@ -27,7 +27,7 @@ func (s *Authy) Init(cfg *Config) {
 	s.http = sptty.CreateHttpClient(sptty.DefaultHttpClientConfig())
 }
 
-func (s *Authy) Auth(req oauth.Request) (oauth.Response, error) {
+func (s *Authy) OAuth(req oauth.Request) (oauth.Response, error) {
 	r := s.http.R().SetBody(req).SetHeader("content-type", "application/json")
 	url := fmt.Sprintf("%s/api/v1/oauth", s.cfg.Url)
 	resp, err := r.Post(url)
@@ -42,6 +42,25 @@ func (s *Authy) Auth(req oauth.Request) (oauth.Response, error) {
 		} else {
 			_ = json.Unmarshal(resp.Body(), &ab)
 			return ab, nil
+		}
+	}
+}
+
+func (s *Authy) OAuthEndpoint(oauthType string, endpoint string) (*oauth.Endpoint, error) {
+	r := s.http.R().SetHeader("content-type", "application/json")
+	url := fmt.Sprintf("%s/api/v1/oauth?type=%s&endpoint=%s", s.cfg.Url, oauthType, endpoint)
+	resp, err := r.Get(url)
+
+	ab := oauth.Endpoint{}
+
+	if err != nil {
+		return nil, err
+	} else {
+		if resp.StatusCode() != http.StatusOK {
+			return nil, errors.New(string(resp.Body()))
+		} else {
+			_ = json.Unmarshal(resp.Body(), &ab)
+			return &ab, nil
 		}
 	}
 }
