@@ -14,7 +14,7 @@ func (s *Service) postAuth(ctx iris.Context) {
 		return
 	}
 
-	resp, err := s.doOAuth(req)
+	resp, err := s.OAuth(req)
 	if err != nil {
 		ctx.StatusCode(iris.StatusBadRequest)
 		_, _ = ctx.Write(sptty.NewRequestError(ErrAuthFailed, err.Error()))

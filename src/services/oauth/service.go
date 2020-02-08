@@ -54,7 +54,7 @@ func (s *Service) ServiceName() string {
 	return ServiceName
 }
 
-func (s *Service) doOAuth(req Request) (Response, error) {
+func (s *Service) OAuth(req Request) (Response, error) {
 	resp := Response{
 		Type: req.Type,
 	}

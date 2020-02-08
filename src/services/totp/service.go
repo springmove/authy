@@ -22,7 +22,7 @@ func (s *Service) Init(app sptty.Sptty) error {
 	}
 
 	app.AddRoute("PUT", "/totp-generate", s.putGenerate)
-	app.AddRoute("PUT", "/totp-validate", s.putValidate)
+	app.AddRoute("PUT", "/totp-Validate", s.putValidate)
 
 	return nil
 }
@@ -39,7 +39,7 @@ func (s *Service) ServiceName() string {
 	return ServiceName
 }
 
-func (s *Service) gererate(endpoint string) (string, string, error) {
+func (s *Service) Gererate(endpoint string) (string, string, error) {
 	ep, exist := s.cfg.Endpoints[endpoint]
 	if !exist {
 		return "", "", errors.New("Endpoint Not Found ")
@@ -67,7 +67,7 @@ func (s *Service) gererate(endpoint string) (string, string, error) {
 	return code, key.Secret(), nil
 }
 
-func (s *Service) validate(endpoint string, code string, key string) (bool, error) {
+func (s *Service) Validate(endpoint string, code string, key string) (bool, error) {
 	ep, exist := s.cfg.Endpoints[endpoint]
 	if !exist {
 		return false, errors.New("Endpoint Not Found ")
