@@ -17,27 +17,21 @@ func main() {
 	app := sptty.GetApp()
 	app.ConfFromFile(*cfg)
 
-	wechatService := &wechat.Service{}
-	alipayService := &alipay.Service{}
-
-	authService := &oauth.Service{}
-	authService.SetupProviders(map[string]oauth.IOAuthProvider{
-		oauth.WeChatOAuth:       &wechatService.OAuth,
-		oauth.WeChatMiniProgram: &wechatService.MiniProgram,
-		oauth.AliPayOAuth:       &alipayService.OAuth,
+	oauthService := &oauth.Service{}
+	oauthService.SetupProviders(map[string]oauth.IOAuthProvider{
+		oauth.WeChatOAuth:       &wechat.OAuth{},
+		oauth.WeChatMiniProgram: &wechat.MiniProgram{},
+		oauth.AliPayOAuth:       &alipay.OAuth{},
 	})
 
 	services := sptty.Services{
-		wechatService,
-		alipayService,
-		authService,
+		oauthService,
 		&jwt.Service{},
 		&totp.Service{},
 	}
 
 	configs := sptty.Configs{
-		&wechat.Config{},
-		&alipay.Config{},
+		&oauth.Config{},
 		&jwt.Config{},
 		&totp.Config{},
 	}

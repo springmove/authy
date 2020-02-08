@@ -8,8 +8,9 @@ import (
 
 type IOAuthProvider interface {
 	OAuth(req *Request) (*Response, error)
-	Init(endpoints map[string]Endpoint)
-	GetEndpoint(endpoint string) (*Endpoint, error)
+	Init()
+	GetEndpoint(name string) (*Endpoint, error)
+	AddEndpoint(name string, endpoint Endpoint)
 }
 
 type BaseOAuth struct {
@@ -17,8 +18,8 @@ type BaseOAuth struct {
 	Endpoints map[string]Endpoint
 }
 
-func (s *BaseOAuth) GetEndpoint(endpoint string) (*Endpoint, error) {
-	ep, exist := s.Endpoints[endpoint]
+func (s *BaseOAuth) GetEndpoint(name string) (*Endpoint, error) {
+	ep, exist := s.Endpoints[name]
 	if !exist {
 		return nil, errors.New("Endpoint Not Found ")
 	}
@@ -26,9 +27,15 @@ func (s *BaseOAuth) GetEndpoint(endpoint string) (*Endpoint, error) {
 	return &ep, nil
 }
 
-func (s *BaseOAuth) Init(endpoints map[string]Endpoint) {
-	s.Endpoints = endpoints
+func (s *BaseOAuth) Init() {
 	s.Http = sptty.CreateHttpClient(sptty.DefaultHttpClientConfig())
+}
+
+func (s *BaseOAuth) AddEndpoint(name string, endpoint Endpoint) {
+	if s.Endpoints == nil {
+		s.Endpoints = map[string]Endpoint{}
+	}
+	s.Endpoints[name] = endpoint
 }
 
 func (s *BaseOAuth) PreAuth(req *Request) (*Endpoint, error) {

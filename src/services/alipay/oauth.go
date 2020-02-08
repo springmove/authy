@@ -13,18 +13,18 @@ type OAuth struct {
 	clients map[string]*v3.Client
 }
 
-func (s *OAuth) Init(endpoints map[string]oauth.Endpoint) {
+func (s *OAuth) Init() {
 	s.clients = map[string]*v3.Client{}
 
-	for k, v := range endpoints {
+	for k, v := range s.Endpoints {
 		client, err := v3.New(v.AppID, v.AppSecret, true)
 		if err != nil {
-			sptty.Log(sptty.ErrorLevel, fmt.Sprintf("Create Alipay Client Failed: %s", err.Error()), ServiceName)
+			sptty.Log(sptty.ErrorLevel, fmt.Sprintf("Create Alipay Client Failed: %s", err.Error()), oauth.AliPayOAuth)
 			continue
 		}
 
 		if err := client.LoadAliPayPublicKey(v.PublicKey); err != nil {
-			sptty.Log(sptty.ErrorLevel, fmt.Sprintf("Load PublicKey Failed: %s", err.Error()), ServiceName)
+			sptty.Log(sptty.ErrorLevel, fmt.Sprintf("Load PublicKey Failed: %s", err.Error()), oauth.AliPayOAuth)
 			continue
 		}
 

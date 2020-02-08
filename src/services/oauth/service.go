@@ -10,13 +10,36 @@ const (
 )
 
 type Service struct {
+	cfg            Config
 	oauthProviders map[string]IOAuthProvider
 }
 
 func (s *Service) Init(app sptty.Sptty) error {
+	if err := app.GetConfig(ServiceName, &s.cfg); err != nil {
+		return err
+	}
+
 	app.AddRoute("POST", "/oauth", s.postAuth)
-	app.AddRoute("GET", "/oauth-endpoint", s.postAuth)
+	app.AddRoute("GET", "/oauth-endpoint", s.getEndpoint)
+
+	s.initProviders()
+
 	return nil
+}
+
+func (s *Service) initProviders() {
+	for k, v := range s.cfg.Endpoints {
+		provider, err := s.getProvider(v.Type)
+		if err != nil {
+			continue
+		}
+
+		provider.AddEndpoint(k, v)
+	}
+
+	for _, provider := range s.oauthProviders {
+		provider.Init()
+	}
 }
 
 func (s *Service) Release() {
