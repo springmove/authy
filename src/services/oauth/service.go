@@ -56,10 +56,10 @@ func (s *Service) ServiceName() string {
 
 func (s *Service) OAuth(req Request) (Response, error) {
 	resp := Response{
-		Type: req.Type,
+		Type: req.Provider,
 	}
 
-	provider, err := s.getProvider(req.Type)
+	provider, err := s.getProvider(req.Provider)
 	if err != nil {
 		return resp, err
 	}
@@ -69,7 +69,7 @@ func (s *Service) OAuth(req Request) (Response, error) {
 		return resp, err
 	}
 
-	respData.Type = req.Type
+	respData.Type = req.Provider
 	return resp, nil
 }
 

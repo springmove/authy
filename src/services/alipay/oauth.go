@@ -19,12 +19,12 @@ func (s *OAuth) Init() {
 	for k, v := range s.Endpoints {
 		client, err := v3.New(v.AppID, v.AppSecret, true)
 		if err != nil {
-			sptty.Log(sptty.ErrorLevel, fmt.Sprintf("Create Alipay Client Failed: %s", err.Error()), oauth.AliPayOAuth)
+			sptty.Log(sptty.ErrorLevel, fmt.Sprintf("Create Alipay Client Failed: %s", err.Error()), oauth.AliPay)
 			continue
 		}
 
 		if err := client.LoadAliPayPublicKey(v.PublicKey); err != nil {
-			sptty.Log(sptty.ErrorLevel, fmt.Sprintf("Load PublicKey Failed: %s", err.Error()), oauth.AliPayOAuth)
+			sptty.Log(sptty.ErrorLevel, fmt.Sprintf("Load PublicKey Failed: %s", err.Error()), oauth.AliPay)
 			continue
 		}
 

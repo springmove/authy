@@ -7,7 +7,7 @@ require (
 	github.com/json-iterator/go v1.1.9 // indirect
 	github.com/kataras/iris v11.1.1+incompatible
 	github.com/klauspost/compress v1.9.8 // indirect
-	github.com/linshenqi/sptty v0.0.0-20200209044551-a616743ed117
+	github.com/linshenqi/sptty v0.0.0-20200211162103-9c1bd70a0667
 	github.com/pquerna/otp v1.2.0
 	github.com/smartwalle/alipay/v3 v3.0.13
 	github.com/stretchr/testify v1.4.0

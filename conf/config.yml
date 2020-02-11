@@ -11,11 +11,11 @@ http:
 oauth:
   endpoints:
     ashibro_wechat:
-      type: wechat_oauth
+      provider: wechat_oauth
       app_id: 1
       app_secret: 1
     ashibro_alipay:
-      type: alipay_oauth
+      provider: alipay_oauth
       app_id: 1
       app_secret: 1
       public_key: pub

@@ -25,7 +25,7 @@ func TestAuthWechatOAuth(t *testing.T) {
 	authy := getApi()
 
 	_, err := authy.OAuth(oauth.Request{
-		Type:     oauth.WeChatOAuth,
+		Provider: oauth.WeChat,
 		Endpoint: "ashibro_dev",
 		Code:     "1234",
 	})

@@ -19,9 +19,9 @@ func main() {
 
 	oauthService := &oauth.Service{}
 	oauthService.SetupProviders(map[string]oauth.IOAuthProvider{
-		oauth.WeChatOAuth:       &wechat.OAuth{},
+		oauth.WeChat:            &wechat.OAuth{},
 		oauth.WeChatMiniProgram: &wechat.MiniProgram{},
-		oauth.AliPayOAuth:       &alipay.OAuth{},
+		oauth.AliPay:            &alipay.OAuth{},
 	})
 
 	services := sptty.Services{
@@ -38,6 +38,6 @@ func main() {
 
 	app.AddServices(services)
 	app.AddConfigs(configs)
-
+	
 	app.Sptting()
 }

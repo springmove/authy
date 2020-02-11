@@ -6,16 +6,15 @@ const (
 )
 
 const (
-	WeChatOAuth       = "wechat_oauth"
+	WeChat            = "wechat"
 	WeChatMiniProgram = "wechat_miniprogram"
-	AliPayOAuth       = "alipay_oauth"
+	AliPay            = "alipay"
 )
 
 type Request struct {
-	Type string `json:"type"`
-
-	Endpoint string `json:"Endpoint"`
-	Code     string `json:"Code"`
+	Provider string `json:"provider"`
+	Endpoint string `json:"endpoint"`
+	Code     string `json:"code"`
 }
 
 type Response struct {

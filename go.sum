@@ -111,8 +111,8 @@ github.com/lestrrat-go/strftime v1.0.1 h1:o7qz5pmLzPDLyGW4lG6JvTKPUfTFXwe+vOamIY
 github.com/lestrrat-go/strftime v1.0.1/go.mod h1:E1nN3pCbtMSu1yjSVeyuRFVm/U0xoR76fd03sz+Qz4g=
 github.com/lib/pq v1.1.1 h1:sJZmqHoEaY7f+NPP8pgLB/WxulyR3fewgCM2qaSlBb4=
 github.com/lib/pq v1.1.1/go.mod h1:5WUZQaWbwv1U+lTReE5YruASi9Al49XbQIvNi/34Woo=
-github.com/linshenqi/sptty v0.0.0-20200209044551-a616743ed117 h1:FD7rp6PCuq0Gzr+a0TE81K3x82KjUruyWcM65xSGqQ8=
-github.com/linshenqi/sptty v0.0.0-20200209044551-a616743ed117/go.mod h1:NF1XEfhVPxSQBTD9fWZEI43wXwvXK8hPxNvyJoThsHY=
+github.com/linshenqi/sptty v0.0.0-20200211162103-9c1bd70a0667 h1:dNuzPsxZ3GLvQyG6eJON+MOjkyOgZexneTUYUqEg1l4=
+github.com/linshenqi/sptty v0.0.0-20200211162103-9c1bd70a0667/go.mod h1:NF1XEfhVPxSQBTD9fWZEI43wXwvXK8hPxNvyJoThsHY=
 github.com/mattn/go-colorable v0.1.4 h1:snbPLB8fVfU9iwbbo30TPtbLRzwWu6aJS6Xh4eaaviA=
 github.com/mattn/go-colorable v0.1.4/go.mod h1:U0ppj6V5qS13XJ6of8GYAs25YV2eR4EVcfRqFIhoBtE=
 github.com/mattn/go-isatty v0.0.8 h1:HLtExJ+uU2HOZ+wI0Tt5DtUDrx8yhUqDcp7fYERX4CE=
