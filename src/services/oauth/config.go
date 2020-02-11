@@ -5,7 +5,7 @@ type Config struct {
 }
 
 type Endpoint struct {
-	Type      string `yaml:"type" json:"type"`
+	Provider  string `yaml:"type" json:"provider"`
 	AppID     string `yaml:"app_id" json:"app_id"`
 	AppSecret string `yaml:"app_secret" json:"app_secret"`
 	PublicKey string `yaml:"public_key" json:"public_key"`

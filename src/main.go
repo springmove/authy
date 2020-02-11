@@ -38,6 +38,6 @@ func main() {
 
 	app.AddServices(services)
 	app.AddConfigs(configs)
-	
+
 	app.Sptting()
 }

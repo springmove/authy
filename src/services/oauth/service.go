@@ -29,7 +29,7 @@ func (s *Service) Init(app sptty.Sptty) error {
 
 func (s *Service) initProviders() {
 	for k, v := range s.cfg.Endpoints {
-		provider, err := s.getProvider(v.Type)
+		provider, err := s.getProvider(v.Provider)
 		if err != nil {
 			continue
 		}
