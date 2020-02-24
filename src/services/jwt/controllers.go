@@ -3,7 +3,7 @@ package jwt
 import (
 	"encoding/json"
 	"github.com/dgrijalva/jwt-go"
-	"github.com/kataras/iris"
+	"github.com/kataras/iris/v12"
 	"github.com/linshenqi/sptty"
 )
 
