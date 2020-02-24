@@ -72,7 +72,7 @@ func TestJwt(t *testing.T) {
 func TestTotp(t *testing.T) {
 	authy := getApi()
 
-	body, err := authy.TotpGenerate("t1")
+	body, err := authy.TotpGenerate("sms")
 	if err != nil {
 		fmt.Println(err.Error())
 		return
@@ -82,7 +82,7 @@ func TestTotp(t *testing.T) {
 	fmt.Println(body.Key)
 
 	success, err := authy.TotpValidate(totp.ValidateRequest{
-		RequestEndpoint: totp.RequestEndpoint{Endpoint: "t1"},
+		RequestEndpoint: totp.RequestEndpoint{Endpoint: "sms"},
 		GenerateBody: totp.GenerateBody{
 			Code: body.Code,
 			Key:  body.Key,

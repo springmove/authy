@@ -22,7 +22,7 @@ func (s *Service) Init(app sptty.Sptty) error {
 	}
 
 	app.AddRoute("PUT", "/totp-generate", s.putGenerate)
-	app.AddRoute("PUT", "/totp-Validate", s.putValidate)
+	app.AddRoute("PUT", "/totp-validate", s.putValidate)
 
 	return nil
 }
