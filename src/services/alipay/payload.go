@@ -1,7 +1,7 @@
 package alipay
 
 import (
-	"github.com/linshenqi/authy/src/services/oauth"
+	"github.com/linshenqi/authy/src/services/base"
 	v3 "github.com/smartwalle/alipay/v3"
 )
 
@@ -9,7 +9,7 @@ type UserInfoResponse struct {
 	v3.UserInfoShareRsp
 }
 
-func (s *UserInfoResponse) toAuthResponseData() *oauth.Response {
+func (s *UserInfoResponse) toAuthResponseData() *base.Response {
 	gender := 0
 	if s.Content.Gender == "M" {
 		gender = 1
@@ -17,7 +17,8 @@ func (s *UserInfoResponse) toAuthResponseData() *oauth.Response {
 		gender = 2
 	}
 
-	return &oauth.Response{
+	return &base.Response{
+		Type:     base.AliPay,
 		UnionID:  s.Content.UserId,
 		Name:     s.Content.NickName,
 		Gender:   gender,

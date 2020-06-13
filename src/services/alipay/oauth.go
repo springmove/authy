@@ -3,13 +3,13 @@ package alipay
 import (
 	"errors"
 	"fmt"
-	"github.com/linshenqi/authy/src/services/oauth"
+	"github.com/linshenqi/authy/src/services/base"
 	"github.com/linshenqi/sptty"
 	v3 "github.com/smartwalle/alipay/v3"
 )
 
 type OAuth struct {
-	oauth.BaseOAuth
+	base.BaseOAuth
 	clients map[string]*v3.Client
 }
 
@@ -19,12 +19,12 @@ func (s *OAuth) Init() {
 	for k, v := range s.Endpoints {
 		client, err := v3.New(v.AppID, v.AppSecret, true)
 		if err != nil {
-			sptty.Log(sptty.ErrorLevel, fmt.Sprintf("Create Alipay Client Failed: %s", err.Error()), oauth.AliPay)
+			sptty.Log(sptty.ErrorLevel, fmt.Sprintf("Create Alipay Client Failed: %s", err.Error()), base.AliPay)
 			continue
 		}
 
 		if err := client.LoadAliPayPublicKey(v.PublicKey); err != nil {
-			sptty.Log(sptty.ErrorLevel, fmt.Sprintf("Load PublicKey Failed: %s", err.Error()), oauth.AliPay)
+			sptty.Log(sptty.ErrorLevel, fmt.Sprintf("Load PublicKey Failed: %s", err.Error()), base.AliPay)
 			continue
 		}
 
@@ -32,7 +32,7 @@ func (s *OAuth) Init() {
 	}
 }
 
-func (s *OAuth) OAuth(req *oauth.Request) (*oauth.Response, error) {
+func (s *OAuth) OAuth(req *base.Request) (*base.Response, error) {
 	if req == nil {
 		return nil, errors.New("Request Data Is Nil ")
 	}

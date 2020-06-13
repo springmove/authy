@@ -4,14 +4,14 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/linshenqi/authy/src/services/oauth"
+	"github.com/linshenqi/authy/src/services/base"
 )
 
 type OAuth struct {
-	oauth.BaseOAuth
+	base.BaseOAuth
 }
 
-func (s *OAuth) OAuth(req *oauth.Request) (*oauth.Response, error) {
+func (s *OAuth) OAuth(req *base.Request) (*base.Response, error) {
 	endpoint, err := s.PreAuth(req)
 	if err != nil {
 		return nil, err

@@ -1,6 +1,8 @@
 package wechat
 
-import "github.com/linshenqi/authy/src/services/oauth"
+import (
+	"github.com/linshenqi/authy/src/services/base"
+)
 
 const (
 	WxOK = 0
@@ -18,8 +20,9 @@ type MiniProgramAuthResponse struct {
 	UnionID    string `json:"unionid"`
 }
 
-func (s *MiniProgramAuthResponse) toAuthResponseData() *oauth.Response {
-	return &oauth.Response{
+func (s *MiniProgramAuthResponse) toAuthResponseData() *base.Response {
+	return &base.Response{
+		Type:    base.WeChatMiniProgram,
 		OpenID:  s.OpenID,
 		UnionID: s.UnionID,
 	}
@@ -52,8 +55,9 @@ type UserInfoResponse struct {
 	UserInfo
 }
 
-func (s *UserInfoResponse) toAuthResponseData() *oauth.Response {
-	return &oauth.Response{
+func (s *UserInfoResponse) toAuthResponseData() *base.Response {
+	return &base.Response{
+		Type:     base.WeChat,
 		OpenID:   s.OpenID,
 		UnionID:  s.UnionID,
 		Name:     s.NickName,

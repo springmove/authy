@@ -1,14 +1,9 @@
 package oauth
 
-type Config struct {
-	Endpoints map[string]Endpoint `yaml:"endpoints"`
-}
+import "github.com/linshenqi/authy/src/services/base"
 
-type Endpoint struct {
-	Provider  string `yaml:"type" json:"provider"`
-	AppID     string `yaml:"app_id" json:"app_id"`
-	AppSecret string `yaml:"app_secret" json:"app_secret"`
-	PublicKey string `yaml:"public_key" json:"public_key"`
+type Config struct {
+	Endpoints map[string]base.Endpoint `yaml:"endpoints"`
 }
 
 func (s *Config) ConfigName() string {

@@ -3,21 +3,22 @@ package oauth
 import (
 	"encoding/json"
 	"github.com/kataras/iris/v12"
+	"github.com/linshenqi/authy/src/services/base"
 	"github.com/linshenqi/sptty"
 )
 
 func (s *Service) postAuth(ctx iris.Context) {
-	req := Request{}
+	req := base.Request{}
 	if err := ctx.ReadJSON(&req); err != nil {
 		ctx.StatusCode(iris.StatusBadRequest)
-		_, _ = ctx.Write(sptty.NewRequestError(ErrAuthFailed, err.Error()))
+		_, _ = ctx.Write(sptty.NewRequestError(base.ErrAuthFailed, err.Error()))
 		return
 	}
 
 	resp, err := s.OAuth(req)
 	if err != nil {
 		ctx.StatusCode(iris.StatusBadRequest)
-		_, _ = ctx.Write(sptty.NewRequestError(ErrAuthFailed, err.Error()))
+		_, _ = ctx.Write(sptty.NewRequestError(base.ErrAuthFailed, err.Error()))
 		return
 	}
 
@@ -33,7 +34,7 @@ func (s *Service) getEndpoint(ctx iris.Context) {
 	ep, err := s.findEndpoint(oauthType, endpoint)
 	if err != nil {
 		ctx.StatusCode(iris.StatusBadRequest)
-		_, _ = ctx.Write(sptty.NewRequestError(ErrEndpointNotFound, err.Error()))
+		_, _ = ctx.Write(sptty.NewRequestError(base.ErrEndpointNotFound, err.Error()))
 		return
 	}
 

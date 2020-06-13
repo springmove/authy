@@ -2,6 +2,9 @@ package oauth
 
 import (
 	"errors"
+	"github.com/linshenqi/authy/src/services/alipay"
+	"github.com/linshenqi/authy/src/services/base"
+	"github.com/linshenqi/authy/src/services/wechat"
 	"github.com/linshenqi/sptty"
 )
 
@@ -11,7 +14,7 @@ const (
 
 type Service struct {
 	cfg            Config
-	oauthProviders map[string]IOAuthProvider
+	oauthProviders map[string]base.IOAuthProvider
 }
 
 func (s *Service) Init(app sptty.Sptty) error {
@@ -22,6 +25,7 @@ func (s *Service) Init(app sptty.Sptty) error {
 	app.AddRoute("POST", "/oauth", s.postAuth)
 	app.AddRoute("GET", "/oauth-endpoint", s.getEndpoint)
 
+	s.setupProviders()
 	s.initProviders()
 
 	return nil
@@ -54,8 +58,8 @@ func (s *Service) ServiceName() string {
 	return ServiceName
 }
 
-func (s *Service) OAuth(req Request) (Response, error) {
-	resp := Response{
+func (s *Service) OAuth(req base.Request) (base.Response, error) {
+	resp := base.Response{
 		Type: req.Provider,
 	}
 
@@ -73,7 +77,7 @@ func (s *Service) OAuth(req Request) (Response, error) {
 	return resp, nil
 }
 
-func (s *Service) getProvider(oauthType string) (IOAuthProvider, error) {
+func (s *Service) getProvider(oauthType string) (base.IOAuthProvider, error) {
 	provider, exist := s.oauthProviders[oauthType]
 	if !exist {
 		return nil, errors.New("Provider Not Found ")
@@ -82,7 +86,7 @@ func (s *Service) getProvider(oauthType string) (IOAuthProvider, error) {
 	return provider, nil
 }
 
-func (s *Service) findEndpoint(oauthType string, endpoint string) (*Endpoint, error) {
+func (s *Service) findEndpoint(oauthType string, endpoint string) (*base.Endpoint, error) {
 	provider, err := s.getProvider(oauthType)
 	if err != nil {
 		return nil, err
@@ -91,6 +95,10 @@ func (s *Service) findEndpoint(oauthType string, endpoint string) (*Endpoint, er
 	return provider.GetEndpoint(endpoint)
 }
 
-func (s *Service) SetupProviders(providers map[string]IOAuthProvider) {
-	s.oauthProviders = providers
+func (s *Service) setupProviders() {
+	s.oauthProviders = map[string]base.IOAuthProvider{
+		base.WeChat:            &wechat.OAuth{},
+		base.WeChatMiniProgram: &wechat.MiniProgram{},
+		base.AliPay:            &alipay.OAuth{},
+	}
 }
