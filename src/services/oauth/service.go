@@ -59,9 +59,7 @@ func (s *Service) ServiceName() string {
 }
 
 func (s *Service) OAuth(req base.Request) (base.Response, error) {
-	resp := base.Response{
-		Type: req.Provider,
-	}
+	resp := base.Response{}
 
 	provider, err := s.getProvider(req.Provider)
 	if err != nil {
@@ -74,7 +72,7 @@ func (s *Service) OAuth(req base.Request) (base.Response, error) {
 	}
 
 	respData.Type = req.Provider
-	return resp, nil
+	return *respData, nil
 }
 
 func (s *Service) getProvider(oauthType string) (base.IOAuthProvider, error) {
