@@ -3,14 +3,15 @@ package api
 import (
 	"encoding/json"
 	"fmt"
+	"net/http"
+
 	"github.com/dgrijalva/jwt-go"
 	"github.com/kataras/iris/core/errors"
+	"github.com/linshenqi/authy/src/services/base"
 	jwt2 "github.com/linshenqi/authy/src/services/jwt"
-	"github.com/linshenqi/authy/src/services/oauth"
 	"github.com/linshenqi/authy/src/services/totp"
 	"github.com/linshenqi/sptty"
 	"gopkg.in/resty.v1"
-	"net/http"
 )
 
 type Config struct {
@@ -27,12 +28,12 @@ func (s *Authy) Init(cfg *Config) {
 	s.http = sptty.CreateHttpClient(sptty.DefaultHttpClientConfig())
 }
 
-func (s *Authy) OAuth(req oauth.Request) (oauth.Response, error) {
+func (s *Authy) OAuth(req base.Request) (base.Response, error) {
 	r := s.http.R().SetBody(req).SetHeader("content-type", "application/json")
 	url := fmt.Sprintf("%s/api/v1/oauth", s.cfg.Url)
 	resp, err := r.Post(url)
 
-	ab := oauth.Response{}
+	ab := base.Response{}
 
 	if err != nil {
 		return ab, err
@@ -46,12 +47,12 @@ func (s *Authy) OAuth(req oauth.Request) (oauth.Response, error) {
 	}
 }
 
-func (s *Authy) OAuthEndpoint(oauthType string, endpoint string) (*oauth.Endpoint, error) {
+func (s *Authy) OAuthEndpoint(oauthType string, endpoint string) (*base.Endpoint, error) {
 	r := s.http.R().SetHeader("content-type", "application/json")
 	url := fmt.Sprintf("%s/api/v1/oauth?type=%s&endpoint=%s", s.cfg.Url, oauthType, endpoint)
 	resp, err := r.Get(url)
 
-	ab := oauth.Endpoint{}
+	ab := base.Endpoint{}
 
 	if err != nil {
 		return nil, err

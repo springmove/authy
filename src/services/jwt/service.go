@@ -2,10 +2,11 @@ package jwt
 
 import (
 	"fmt"
+	"time"
+
 	"github.com/dgrijalva/jwt-go"
 	"github.com/kataras/iris/core/errors"
 	"github.com/linshenqi/sptty"
-	"time"
 )
 
 const (
@@ -97,4 +98,13 @@ func (s *Service) Parse(tokenStr string) (jwt.MapClaims, error) {
 	} else {
 		return nil, errors.New("Token Invalid")
 	}
+}
+
+func (s *Service) Refresh(tokenStr string) (string, error) {
+	claims, err := s.Parse(tokenStr)
+	if err != nil {
+		return "", err
+	}
+
+	return s.Sign(claims)
 }

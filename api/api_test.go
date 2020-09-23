@@ -2,12 +2,13 @@ package api
 
 import (
 	"fmt"
+	"testing"
+
 	"github.com/dgrijalva/jwt-go"
+	"github.com/linshenqi/authy/src/services/base"
 	jwt2 "github.com/linshenqi/authy/src/services/jwt"
-	"github.com/linshenqi/authy/src/services/oauth"
 	"github.com/linshenqi/authy/src/services/totp"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func getApi() *Authy {
@@ -24,8 +25,8 @@ func getApi() *Authy {
 func TestAuthWechatOAuth(t *testing.T) {
 	authy := getApi()
 
-	_, err := authy.OAuth(oauth.Request{
-		Provider: oauth.WeChat,
+	_, err := authy.OAuth(base.Request{
+		Provider: base.WeChat,
 		Endpoint: "ashibro_dev",
 		Code:     "1234",
 	})
