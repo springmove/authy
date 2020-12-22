@@ -2,8 +2,8 @@ package wechat
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
+
 	"github.com/linshenqi/authy/src/services/base"
 )
 
@@ -47,7 +47,7 @@ func (s *OAuth) doAuth(appID string, secret string, code string) (OAuthResponse,
 			return rt, err
 		} else {
 			if rt.ErrCode != WxOK {
-				return rt, errors.New(fmt.Sprintf("ErrCode: %d, ErrMsg: %s", rt.ErrCode, rt.ErrMsg))
+				return rt, fmt.Errorf("ErrCode: %d, ErrMsg: %s", rt.ErrCode, rt.ErrMsg)
 			}
 
 			return rt, nil
@@ -71,7 +71,7 @@ func (s *OAuth) getUserInfo(accessToken string, openID string) (UserInfoResponse
 			return rt, err
 		} else {
 			if rt.ErrCode != WxOK {
-				return rt, errors.New(fmt.Sprintf("ErrCode: %d, ErrMsg: %s", rt.ErrCode, rt.ErrMsg))
+				return rt, fmt.Errorf("ErrCode: %d, ErrMsg: %s", rt.ErrCode, rt.ErrMsg)
 			}
 
 			return rt, nil

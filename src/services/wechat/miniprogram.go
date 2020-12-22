@@ -2,8 +2,8 @@ package wechat
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
+
 	"github.com/linshenqi/authy/src/services/base"
 )
 
@@ -42,7 +42,7 @@ func (s *MiniProgram) miniprogramAuth(appID string, secret string, code string) 
 			return rt, err
 		} else {
 			if rt.ErrCode != WxOK {
-				return rt, errors.New(fmt.Sprintf("ErrCode: %d, ErrMsg: %s", rt.ErrCode, rt.ErrMsg))
+				return rt, fmt.Errorf("ErrCode: %d, ErrMsg: %s", rt.ErrCode, rt.ErrMsg)
 			}
 
 			return rt, nil

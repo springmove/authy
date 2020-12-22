@@ -2,8 +2,7 @@ version: 2
 jobs:
   build:
     branches:
-      only:
-        - master
+      ignore: /.*/
     docker:
       - image: circleci/golang:latest
     steps:
