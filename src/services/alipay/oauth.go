@@ -3,7 +3,8 @@ package alipay
 import (
 	"errors"
 	"fmt"
-	"github.com/linshenqi/authy/src/services/base"
+
+	"github.com/linshenqi/authy/src/base"
 	"github.com/linshenqi/sptty"
 	v3 "github.com/smartwalle/alipay/v3"
 )

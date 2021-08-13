@@ -2,8 +2,9 @@ package oauth
 
 import (
 	"errors"
+
+	"github.com/linshenqi/authy/src/base"
 	"github.com/linshenqi/authy/src/services/alipay"
-	"github.com/linshenqi/authy/src/services/base"
 	"github.com/linshenqi/authy/src/services/wechat"
 	"github.com/linshenqi/sptty"
 )

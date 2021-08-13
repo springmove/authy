@@ -2,8 +2,9 @@ package oauth
 
 import (
 	"encoding/json"
+
 	"github.com/kataras/iris/v12"
-	"github.com/linshenqi/authy/src/services/base"
+	"github.com/linshenqi/authy/src/base"
 	"github.com/linshenqi/sptty"
 )
 

@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/linshenqi/authy/src/services/base"
+	"github.com/linshenqi/authy/src/base"
 )
 
 type MiniProgram struct {

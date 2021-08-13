@@ -1,6 +1,6 @@
 package oauth
 
-import "github.com/linshenqi/authy/src/services/base"
+import "github.com/linshenqi/authy/src/base"
 
 type Config struct {
 	Endpoints map[string]base.Endpoint `yaml:"endpoints"`

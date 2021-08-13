@@ -1,7 +1,7 @@
 package wechat
 
 import (
-	"github.com/linshenqi/authy/src/services/base"
+	"github.com/linshenqi/authy/src/base"
 )
 
 const (

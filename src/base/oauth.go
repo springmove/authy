@@ -2,6 +2,7 @@ package base
 
 import (
 	"errors"
+
 	"github.com/linshenqi/sptty"
 	"gopkg.in/resty.v1"
 )
