@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+
 	"github.com/linshenqi/authy/src/services/jwt"
 	"github.com/linshenqi/authy/src/services/oauth"
 	"github.com/linshenqi/authy/src/services/totp"

@@ -4,8 +4,8 @@ import (
 	"errors"
 
 	"github.com/linshenqi/authy/src/base"
-	"github.com/linshenqi/authy/src/services/alipay"
-	"github.com/linshenqi/authy/src/services/wechat"
+	"github.com/linshenqi/authy/src/services/oauth/vendors/alipay"
+	"github.com/linshenqi/authy/src/services/oauth/vendors/wechat"
 	"github.com/linshenqi/sptty"
 )
 
