@@ -3,20 +3,25 @@ package totp
 import (
 	"errors"
 	"time"
+
+	"github.com/linshenqi/authy/src/base"
+	"github.com/linshenqi/sptty"
 )
 
 type Config struct {
+	sptty.BaseConfig
+
 	Endpoints map[string]Endpoint `yaml:"endpoints"`
 }
 
 type Endpoint struct {
 	Issuer  string        `yaml:"issuer"`
-	CodeLen int           `yaml:"code_len"`
+	CodeLen int           `yaml:"len"`
 	Expiry  time.Duration `yaml:"expiry"`
 }
 
 func (s *Config) ConfigName() string {
-	return ServiceName
+	return base.ServiceTotp
 }
 
 func (s *Config) Validate() error {

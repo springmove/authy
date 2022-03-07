@@ -9,17 +9,15 @@ import (
 	"github.com/linshenqi/sptty"
 )
 
-const (
-	ServiceName = "oauth"
-)
-
 type Service struct {
+	sptty.BaseService
+
 	cfg            Config
 	oauthProviders map[string]base.IOAuthProvider
 }
 
 func (s *Service) Init(app sptty.ISptty) error {
-	if err := app.GetConfig(ServiceName, &s.cfg); err != nil {
+	if err := app.GetConfig(base.ServiceOAuth, &s.cfg); err != nil {
 		return err
 	}
 
@@ -47,16 +45,8 @@ func (s *Service) initProviders() {
 	}
 }
 
-func (s *Service) Release() {
-
-}
-
-func (s *Service) Enable() bool {
-	return true
-}
-
 func (s *Service) ServiceName() string {
-	return ServiceName
+	return base.ServiceOAuth
 }
 
 func (s *Service) OAuth(req base.Request) (base.Response, error) {

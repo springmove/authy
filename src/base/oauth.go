@@ -7,11 +7,19 @@ import (
 	"gopkg.in/resty.v1"
 )
 
+const (
+	ServiceOAuth = "oauth"
+)
+
+type IServiceOAuth interface {
+	OAuth(req Request) (Response, error)
+}
+
 type Endpoint struct {
 	Provider  string `yaml:"type" json:"provider"`
-	AppID     string `yaml:"app_id" json:"app_id"`
-	AppSecret string `yaml:"app_secret" json:"app_secret"`
-	PublicKey string `yaml:"public_key" json:"public_key"`
+	AppID     string `yaml:"appid" json:"appid"`
+	AppSecret string `yaml:"secret" json:"secret"`
+	PublicKey string `yaml:"publicKey" json:"publicKey"`
 }
 
 const (

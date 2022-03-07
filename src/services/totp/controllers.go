@@ -2,6 +2,7 @@ package totp
 
 import (
 	"encoding/json"
+
 	"github.com/kataras/iris/v12"
 	"github.com/linshenqi/sptty"
 )
@@ -14,7 +15,7 @@ func (s *Service) putGenerate(ctx iris.Context) {
 		return
 	}
 
-	code, key, err := s.Gererate(req.Endpoint)
+	code, key, err := s.Gererate(req.Endpoint, req.Account)
 	if err != nil {
 		ctx.StatusCode(iris.StatusBadRequest)
 		_, _ = ctx.Write(sptty.NewRequestError(RequestFailed, err.Error()))

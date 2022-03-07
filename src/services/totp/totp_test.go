@@ -4,32 +4,41 @@ import (
 	"fmt"
 	"testing"
 	"time"
-
-	"github.com/pquerna/otp/totp"
 )
 
+const (
+	EndpointSMS = "sms"
+)
+
+func getService() *Service {
+	srv := Service{cfg: Config{Endpoints: map[string]Endpoint{
+		EndpointSMS: {
+			Issuer:  EndpointSMS,
+			CodeLen: 6,
+			Expiry:  10 * time.Second,
+		},
+	}}}
+
+	return &srv
+}
+
 func TestTotp(t *testing.T) {
-	// fmt.Println(key.Secret())
-	for i := 0; i < 100; i++ {
+	srv := getService()
 
-		key, err := totp.Generate(totp.GenerateOpts{
-			Issuer:      "Ashibro",
-			AccountName: "Ashibro",
-			Period:      9999,
-		})
-
-		if err != nil {
-			return
-		}
-
-		opts := totp.ValidateOpts{
-			Period: 2,
-			Digits: 6,
-		}
-		code, _ := totp.GenerateCodeCustom(key.Secret(), time.Now(), opts)
-		fmt.Println(code)
+	code, key, err := srv.Gererate(EndpointSMS, "1")
+	if err != nil {
+		return
 	}
 
-	// time.Sleep(3 * time.Second)
-	// fmt.Println(totp.ValidateCustom(code, key.Secret(), time.Now(), opts))
+	fmt.Printf("%s::%s\n", code, key)
+
+	code2, key2, err := srv.Gererate(EndpointSMS, "1")
+	if err != nil {
+		return
+	}
+
+	fmt.Printf("%s::%s\n", code2, key2)
+
+	rt, _ := srv.Validate(EndpointSMS, code, key)
+	fmt.Println(rt)
 }

@@ -11,6 +11,7 @@ type GenerateBody struct {
 
 type RequestEndpoint struct {
 	Endpoint string `json:"endpoint"`
+	Account  string `json:"account"`
 }
 
 type ValidateRequest struct {

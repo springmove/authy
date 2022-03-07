@@ -12,13 +12,13 @@ oauth:
   endpoints:
     ashibro_wechat:
       provider: wechat
-      app_id: 1
-      app_secret: 1
+      appid: 1
+      secret: 1
     ashibro_alipay:
       provider: alipay
-      app_id: 1
-      app_secret: 1
-      public_key: pub
+      appid: 1
+      secret: 1
+      publicKey: pub
 
 jwt:
   expiry: 24h
@@ -27,9 +27,9 @@ totp:
   endpoints:
     sms:
       issuer: i1
-      code_len: 4
+      len: 4
       expiry: 60s
     email:
       issuer: i1
-      code_len: 6
+      len: 6
       expiry: 10m

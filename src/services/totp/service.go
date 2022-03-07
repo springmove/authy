@@ -2,22 +2,22 @@ package totp
 
 import (
 	"errors"
+	"time"
+
+	"github.com/linshenqi/authy/src/base"
 	"github.com/linshenqi/sptty"
 	"github.com/pquerna/otp"
 	"github.com/pquerna/otp/totp"
-	"time"
-)
-
-const (
-	ServiceName = "totp"
 )
 
 type Service struct {
+	sptty.BaseService
+
 	cfg Config
 }
 
 func (s *Service) Init(app sptty.ISptty) error {
-	if err := app.GetConfig(ServiceName, &s.cfg); err != nil {
+	if err := app.GetConfig(base.ServiceTotp, &s.cfg); err != nil {
 		return err
 	}
 
@@ -27,19 +27,11 @@ func (s *Service) Init(app sptty.ISptty) error {
 	return nil
 }
 
-func (s *Service) Release() {
-
-}
-
-func (s *Service) Enable() bool {
-	return true
-}
-
 func (s *Service) ServiceName() string {
-	return ServiceName
+	return base.ServiceTotp
 }
 
-func (s *Service) Gererate(endpoint string) (string, string, error) {
+func (s *Service) Gererate(endpoint string, account string) (string, string, error) {
 	ep, exist := s.cfg.Endpoints[endpoint]
 	if !exist {
 		return "", "", errors.New("Endpoint Not Found ")
@@ -47,7 +39,7 @@ func (s *Service) Gererate(endpoint string) (string, string, error) {
 
 	key, err := totp.Generate(totp.GenerateOpts{
 		Issuer:      ep.Issuer,
-		AccountName: ep.Issuer,
+		AccountName: account,
 		Period:      9999,
 	})
 

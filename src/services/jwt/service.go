@@ -6,16 +6,13 @@ import (
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/kataras/iris/core/errors"
+	"github.com/linshenqi/authy/src/base"
 	"github.com/linshenqi/sptty"
 )
 
-const (
-	ServiceName = "jwt"
-	Secret      = "LijwefL(*IJWE)J@309j@#)(I#$@)(*"
-	TimeStamp   = "timestamp"
-)
-
 type Service struct {
+	sptty.BaseService
+
 	cfg Config
 }
 
@@ -31,24 +28,16 @@ func (s *Service) Init(app sptty.ISptty) error {
 	return nil
 }
 
-func (s *Service) Release() {
-
-}
-
-func (s *Service) Enable() bool {
-	return true
-}
-
 func (s *Service) ServiceName() string {
-	return ServiceName
+	return base.ServiceJwt
 }
 
 func (s *Service) Sign(claims jwt.MapClaims) (string, error) {
-	claims[TimeStamp] = time.Now().Format(time.RFC3339)
+	claims[base.TimeStamp] = time.Now().Format(time.RFC3339)
 	tokenString := ""
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
-	tokenString, err := token.SignedString([]byte(Secret))
+	tokenString, err := token.SignedString([]byte(base.Secret))
 	return tokenString, err
 }
 
@@ -60,19 +49,19 @@ func (s *Service) Validate(myClaims jwt.MapClaims, tokenStr string) (jwt.MapClai
 	}
 
 	for k := range claims {
-		if k == TimeStamp {
+		if k == base.TimeStamp {
 			if s.cfg.Expiry == (0 * time.Second) {
 				continue
 			}
 
 			ts, _ := time.Parse(time.RFC3339, claims[k].(string))
 			if time.Now().After(ts.Add(s.cfg.Expiry)) {
-				return nil, errors.New("Token Expired")
+				return nil, fmt.Errorf(base.CodeExpiry)
 			}
 
 		} else {
 			if claims[k] != myClaims[k] {
-				return nil, errors.New("Token validate Failed")
+				return nil, fmt.Errorf(base.CodeFailed)
 			}
 		}
 	}
@@ -86,7 +75,7 @@ func (s *Service) Parse(tokenStr string) (jwt.MapClaims, error) {
 			return nil, errors.New(fmt.Sprintf("Unexpected Signing Method: %v", token.Header["alg"]))
 		}
 
-		return []byte(Secret), nil
+		return []byte(base.Secret), nil
 	})
 
 	if err != nil {
@@ -107,4 +96,8 @@ func (s *Service) Refresh(tokenStr string) (string, error) {
 	}
 
 	return s.Sign(claims)
+}
+
+func (s *Service) SetSecret(secret string) {
+	base.Secret = secret
 }
