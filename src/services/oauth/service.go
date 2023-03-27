@@ -3,10 +3,10 @@ package oauth
 import (
 	"errors"
 
-	"github.com/linshenqi/authy/src/base"
-	"github.com/linshenqi/authy/src/services/oauth/vendors/alipay"
-	"github.com/linshenqi/authy/src/services/oauth/vendors/wechat"
-	"github.com/linshenqi/sptty"
+	"github.com/springmove/authy/src/base"
+	"github.com/springmove/authy/src/services/oauth/vendors/alipay"
+	"github.com/springmove/authy/src/services/oauth/vendors/wechat"
+	"github.com/springmove/sptty"
 )
 
 type Service struct {

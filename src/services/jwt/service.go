@@ -6,8 +6,8 @@ import (
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/kataras/iris/core/errors"
-	"github.com/linshenqi/authy/src/base"
-	"github.com/linshenqi/sptty"
+	"github.com/springmove/authy/src/base"
+	"github.com/springmove/sptty"
 )
 
 type Service struct {

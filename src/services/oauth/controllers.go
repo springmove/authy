@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 
 	"github.com/kataras/iris/v12"
-	"github.com/linshenqi/authy/src/base"
-	"github.com/linshenqi/sptty"
+	"github.com/springmove/authy/src/base"
+	"github.com/springmove/sptty"
 )
 
 func (s *Service) postAuth(ctx iris.Context) {

@@ -1,7 +1,7 @@
 package alipay
 
 import (
-	"github.com/linshenqi/authy/src/base"
+	"github.com/springmove/authy/src/base"
 	v3 "github.com/smartwalle/alipay/v3"
 )
 

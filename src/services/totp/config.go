@@ -4,8 +4,8 @@ import (
 	"errors"
 	"time"
 
-	"github.com/linshenqi/authy/src/base"
-	"github.com/linshenqi/sptty"
+	"github.com/springmove/authy/src/base"
+	"github.com/springmove/sptty"
 )
 
 type Config struct {

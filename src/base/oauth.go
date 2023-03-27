@@ -3,7 +3,7 @@ package base
 import (
 	"errors"
 
-	"github.com/linshenqi/sptty"
+	"github.com/springmove/sptty"
 	"gopkg.in/resty.v1"
 )
 

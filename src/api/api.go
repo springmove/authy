@@ -7,10 +7,10 @@ import (
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/kataras/iris/core/errors"
-	"github.com/linshenqi/authy/src/base"
-	jwt2 "github.com/linshenqi/authy/src/services/jwt"
-	"github.com/linshenqi/authy/src/services/totp"
-	"github.com/linshenqi/sptty"
+	"github.com/springmove/authy/src/base"
+	jwt2 "github.com/springmove/authy/src/services/jwt"
+	"github.com/springmove/authy/src/services/totp"
+	"github.com/springmove/sptty"
 	"gopkg.in/resty.v1"
 )
 

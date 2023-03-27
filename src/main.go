@@ -3,10 +3,10 @@ package main
 import (
 	"flag"
 
-	"github.com/linshenqi/authy/src/services/jwt"
-	"github.com/linshenqi/authy/src/services/oauth"
-	"github.com/linshenqi/authy/src/services/totp"
-	"github.com/linshenqi/sptty"
+	"github.com/springmove/authy/src/services/jwt"
+	"github.com/springmove/authy/src/services/oauth"
+	"github.com/springmove/authy/src/services/totp"
+	"github.com/springmove/sptty"
 )
 
 func main() {

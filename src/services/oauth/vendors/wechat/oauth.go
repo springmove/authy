@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/linshenqi/authy/src/base"
+	"github.com/springmove/authy/src/base"
 )
 
 type OAuth struct {
