@@ -34,9 +34,10 @@ const (
 )
 
 type Request struct {
-	Provider string `json:"provider"`
-	Endpoint string `json:"endpoint"`
-	Code     string `json:"code"`
+	Provider       string `json:"provider"`
+	Endpoint       string `json:"endpoint"`
+	Code           string `json:"code"`
+	AuthCodeMobile string
 }
 
 type Response struct {
@@ -53,6 +54,7 @@ type Response struct {
 	City     string `json:"city"`
 	Country  string `json:"country"`
 	Avatar   string `json:"avatar"`
+	Mobile   string
 }
 
 type IOAuthProvider interface {

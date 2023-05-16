@@ -25,14 +25,14 @@ func getService() *Service {
 func TestTotp(t *testing.T) {
 	srv := getService()
 
-	code, key, err := srv.Gererate(EndpointSMS, "1")
+	code, key, err := srv.Gererate(EndpointSMS, EndpointSMS)
 	if err != nil {
 		return
 	}
 
 	fmt.Printf("%s::%s\n", code, key)
 
-	code2, key2, err := srv.Gererate(EndpointSMS, "1")
+	code2, key2, err := srv.Gererate(EndpointSMS, EndpointSMS)
 	if err != nil {
 		return
 	}

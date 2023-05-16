@@ -1,7 +1,10 @@
 package wechat
 
 import (
+	"fmt"
+
 	"github.com/springmove/authy/src/base"
+	"gopkg.in/resty.v1"
 )
 
 const (
@@ -67,4 +70,36 @@ func (s *UserInfoResponse) toAuthResponseData() *base.Response {
 		Country:  s.Country,
 		Avatar:   s.HeadImgUrl,
 	}
+}
+
+type ReqAccessToken struct {
+	http   *resty.Client
+	AppID  string
+	Secret string
+}
+
+type RespAccessToken struct {
+	Response
+	Token  string `json:"access_token"`
+	Expiry int    `json:"expires_in"`
+}
+
+type ReqMiniProgramAuthMobile struct {
+	Code string `json:"code"`
+}
+
+type RespMiniProgramAuthMobile struct {
+	Response
+
+	Mobile *MiniProgramAuthMobile `json:"phone_info"`
+}
+
+type MiniProgramAuthMobile struct {
+	FullMobile  string `json:"phoneNumber"`
+	Mobile      string `json:"purePhoneNumber"`
+	CountryCode string `json:"countryCode"`
+}
+
+func (s *MiniProgramAuthMobile) ToValidMobile() string {
+	return fmt.Sprintf("+%s-%s", fmt.Sprintf("%03s", s.CountryCode), s.Mobile)
 }

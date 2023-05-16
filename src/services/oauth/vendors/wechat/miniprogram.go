@@ -22,7 +22,15 @@ func (s *MiniProgram) OAuth(req *base.Request) (*base.Response, error) {
 		return nil, err
 	}
 
-	return resp.toAuthResponseData(), nil
+	respOAuth := resp.toAuthResponseData()
+	mobile, err := s.getMobileByAuthCode(endpoint.AppID, endpoint.AppSecret, req.AuthCodeMobile)
+	if err != nil {
+		return nil, err
+	}
+
+	respOAuth.Mobile = mobile
+
+	return respOAuth, nil
 }
 
 func (s *MiniProgram) miniprogramAuth(appID string, secret string, code string) (MiniProgramAuthResponse, error) {
@@ -48,4 +56,39 @@ func (s *MiniProgram) miniprogramAuth(appID string, secret string, code string) 
 			return rt, nil
 		}
 	}
+}
+
+func (s *MiniProgram) getMobileByAuthCode(appID string, secret string, authCodeMobile string) (string, error) {
+	if authCodeMobile == "" {
+		return "", nil
+	}
+
+	accessToken, err := getAccessToken(&ReqAccessToken{
+		http:   s.Http,
+		AppID:  appID,
+		Secret: secret,
+	})
+
+	if err != nil {
+		return "", err
+	}
+
+	url := fmt.Sprintf("https://api.weixin.qq.com/wxa/business/getuserphonenumber?access_token=%s", accessToken.Token)
+	resp, err := s.Http.R().SetBody(&ReqMiniProgramAuthMobile{
+		Code: authCodeMobile,
+	}).Post(url)
+	if err != nil {
+		return "", err
+	}
+
+	respBody := RespMiniProgramAuthMobile{}
+	if err = json.Unmarshal(resp.Body(), &respBody); err != nil {
+		return "", err
+	}
+
+	if respBody.ErrCode != WxOK {
+		return "", fmt.Errorf("ErrCode: %d, ErrMsg: %s", respBody.ErrCode, respBody.ErrMsg)
+	}
+
+	return respBody.Mobile.ToValidMobile(), nil
 }

@@ -78,3 +78,25 @@ func (s *OAuth) getUserInfo(accessToken string, openID string) (UserInfoResponse
 		}
 	}
 }
+
+func getAccessToken(req *ReqAccessToken) (*RespAccessToken, error) {
+	url := fmt.Sprintf("https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=%s&secret=%s",
+		req.AppID,
+		req.Secret)
+
+	resp, err := req.http.R().Get(url)
+	if err != nil {
+		return nil, err
+	}
+
+	rt := RespAccessToken{}
+	if err = json.Unmarshal(resp.Body(), &rt); err != nil {
+		return nil, err
+	}
+
+	if rt.ErrCode != WxOK {
+		return nil, fmt.Errorf("ErrCode: %d, ErrMsg: %s", rt.ErrCode, rt.ErrMsg)
+	}
+
+	return &rt, nil
+}
