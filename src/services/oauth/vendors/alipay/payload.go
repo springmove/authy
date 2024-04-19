@@ -1,8 +1,8 @@
 package alipay
 
 import (
-	"github.com/springmove/authy/src/base"
 	v3 "github.com/smartwalle/alipay/v3"
+	"github.com/springmove/authy/src/base"
 )
 
 type UserInfoResponse struct {
@@ -11,19 +11,19 @@ type UserInfoResponse struct {
 
 func (s *UserInfoResponse) toAuthResponseData() *base.Response {
 	gender := 0
-	if s.Content.Gender == "M" {
+	if s.Gender == "M" {
 		gender = 1
-	} else if s.Content.Gender == "F" {
+	} else if s.Gender == "F" {
 		gender = 2
 	}
 
 	return &base.Response{
 		Type:     base.AliPay,
-		UnionID:  s.Content.UserId,
-		Name:     s.Content.NickName,
+		UnionID:  s.UserId,
+		Name:     s.NickName,
 		Gender:   gender,
-		Province: s.Content.Province,
-		City:     s.Content.City,
-		Avatar:   s.Content.Avatar,
+		Province: s.Province,
+		City:     s.City,
+		Avatar:   s.Avatar,
 	}
 }

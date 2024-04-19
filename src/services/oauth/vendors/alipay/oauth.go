@@ -4,9 +4,9 @@ import (
 	"errors"
 	"fmt"
 
+	v3 "github.com/smartwalle/alipay/v3"
 	"github.com/springmove/authy/src/base"
 	"github.com/springmove/sptty"
-	v3 "github.com/smartwalle/alipay/v3"
 )
 
 type OAuth struct {
@@ -54,7 +54,7 @@ func (s *OAuth) OAuth(req *base.Request) (*base.Response, error) {
 
 	user, err := client.UserInfoShare(v3.UserInfoShare{
 		AppAuthToken: "",
-		AuthToken:    authResp.Content.AccessToken,
+		AuthToken:    authResp.AccessToken,
 	})
 
 	if err != nil {
