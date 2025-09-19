@@ -90,5 +90,5 @@ func (s *MiniProgram) getMobileByAuthCode(appID string, secret string, authCodeM
 		return "", fmt.Errorf("ErrCode: %d, ErrMsg: %s", respBody.ErrCode, respBody.ErrMsg)
 	}
 
-	return respBody.Mobile.ToValidMobile(), nil
+	return respBody.Mobile.Mobile, nil
 }

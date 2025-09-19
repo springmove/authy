@@ -8,7 +8,7 @@ require (
 	github.com/kataras/iris/v12 v12.2.0
 	github.com/pquerna/otp v1.2.0
 	github.com/smartwalle/alipay/v3 v3.2.20
-	github.com/springmove/sptty v0.1.8
+	github.com/springmove/sptty v0.1.15
 	github.com/stretchr/testify v1.8.2
 	gopkg.in/resty.v1 v1.12.0
 )

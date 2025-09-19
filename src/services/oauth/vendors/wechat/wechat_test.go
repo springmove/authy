@@ -33,7 +33,7 @@ func TestAccessToken(t *testing.T) {
 	})
 
 	if err != nil {
-		t.Logf(err.Error())
+		t.Log(err.Error())
 		return
 	}
 
@@ -44,7 +44,7 @@ func TestAuthMobile(t *testing.T) {
 	mp := getMiniProgram()
 	resp, err := mp.getMobileByAuthCode("", "", "")
 	if err != nil {
-		t.Logf(err.Error())
+		t.Log(err.Error())
 		return
 	}
 
