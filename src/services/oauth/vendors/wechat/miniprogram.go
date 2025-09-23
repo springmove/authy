@@ -17,12 +17,12 @@ func (s *MiniProgram) OAuth(req *base.Request) (*base.Response, error) {
 		return nil, err
 	}
 
-	resp, err := s.miniprogramAuth(endpoint.AppID, endpoint.AppSecret, req.Code)
-	if err != nil {
-		return nil, err
-	}
+	// resp, err := s.miniprogramAuth(endpoint.AppID, endpoint.AppSecret, req.Code)
+	// if err != nil {
+	// 	return nil, err
+	// }
 
-	respOAuth := resp.toAuthResponseData()
+	respOAuth := base.Response{}
 	mobile, err := s.getMobileByAuthCode(endpoint.AppID, endpoint.AppSecret, req.AuthCodeMobile)
 	if err != nil {
 		return nil, err
@@ -30,7 +30,7 @@ func (s *MiniProgram) OAuth(req *base.Request) (*base.Response, error) {
 
 	respOAuth.Mobile = mobile
 
-	return respOAuth, nil
+	return &respOAuth, nil
 }
 
 func (s *MiniProgram) miniprogramAuth(appID string, secret string, code string) (MiniProgramAuthResponse, error) {
